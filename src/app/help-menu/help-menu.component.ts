@@ -15,17 +15,30 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './help-menu.component.css'
 })
 export class HelpMenuComponent {
-  faq_1: boolean = false;
-  faq0: boolean = false;
-  faq1: boolean = false;
-  faq2: boolean = false;
-  faq3: boolean = false;
-  faq4: boolean = false;
-  faq5: boolean = false;
-  faq6: boolean = false;
-  faq7: boolean = false;
-  faq8: boolean = false;
-  faq9: boolean = false;
+  showFAQ: boolean = false;
+  showQ_1: boolean = false;
+  showQ0: boolean = false;
+  showQ1: boolean = false;
+  showQ2: boolean = false;
+  showQ3: boolean = false;
+  showQ4: boolean = false;
+  showQ5: boolean = false;
+  showQ6: boolean = false;
+  showQ7: boolean = false;
+  showQ8: boolean = false;
+  showQ9: boolean = false;
+
+  faq_1: boolean = true;
+  faq0: boolean = true;
+  faq1: boolean = true;
+  faq2: boolean = true;
+  faq3: boolean = true;
+  faq4: boolean = true;
+  faq5: boolean = true;
+  faq6: boolean = true;
+  faq7: boolean = true;
+  faq8: boolean = true;
+  faq9: boolean = true;
 
   searchKeyword: string = '';
 
@@ -41,6 +54,20 @@ export class HelpMenuComponent {
     this.faq7 = false;
     this.faq8 = false;
     this.faq9 = false;
+    
+    if (key == "") {
+        this.faq_1 = true;
+        this.faq0 = true;
+        this.faq1 = true;
+        this.faq2 = true;
+        this.faq3 = true;
+        this.faq4 = true;
+        this.faq5 = true;
+        this.faq6 = true;
+        this.faq7 = true;
+        this.faq8 = true;
+        this.faq9 = true;
+    }
     if (
       'How do I use this GPA Calculator'
         .toLowerCase()
@@ -118,5 +145,64 @@ export class HelpMenuComponent {
     ) {
       this.faq9 = true;
     }
+  }
+
+  changeFAQ()
+  {
+    this.showFAQ = ! this.showFAQ;
+  }
+
+  changeQ_1()
+  {
+    this.showQ_1 = ! this.showQ_1;
+  }
+
+  changeQ0()
+  {
+    this.showQ0 = ! this.showQ0;
+  }
+
+  changeQ1()
+  {
+    this.showQ1 = ! this.showQ1;
+  }
+
+  changeQ2()
+  {
+    this.showQ2 = ! this.showQ2;
+  }
+
+  changeQ3()
+  {
+    this.showQ3 = ! this.showQ3;
+  }
+
+  changeQ4()
+  {
+    this.showQ4 = ! this.showQ4;
+  }
+
+  changeQ5()
+  {
+    this.showQ5 = ! this.showQ5;
+  }
+
+  changeQ6()
+  {
+    this.showQ6 = ! this.showQ6;
+  }
+
+  changeQ7()
+  {
+    this.showQ7 = ! this.showQ7;
+  }
+  changeQ8()
+  {
+    this.showQ8 = ! this.showQ8;
+  }
+
+  changeQ9()
+  {
+    this.showQ9 = ! this.showQ9;
   }
 }

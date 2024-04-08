@@ -11,6 +11,26 @@ header {
   padding: var(--content-padding);
 }
 
+#tab-bar{
+  font-family: Arial, sans-serif;
+  background-color: rgb(184, 208, 228);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+  font-size: 16px;
+  font: sans-serif;
+  font-weight: bold;
+  padding: 50px;
+}
+
 
 /*
 Copyright Google LLC. All Rights Reserved.
