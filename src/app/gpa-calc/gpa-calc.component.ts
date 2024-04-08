@@ -1,7 +1,7 @@
 /* This component defines the variables and functions used for this GPA calculator */
 import { scales } from '../scales';
 import { BrowserModule, SafeResourceUrl } from '@angular/platform-browser';
-import { Input, NgModule } from '@angular/core';
+import { AfterViewInit, Input, NgModule, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
@@ -35,7 +35,19 @@ export class AppModule {}
 })
 
 
-export class GpaCalcComponent {
+export class GpaCalcComponent implements AfterViewInit {
+  // @ViewChild('tawkContainer') tawkContainer!: ElementRef;
+
+  ngAfterViewInit(): void {
+    // const s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    // s1.type = 'text/javascript';
+    // s1.async=true;
+    // s1.src='https://embed.tawk.to/661315dca0c6737bd12949a5/1hqt8qprg';
+    // s1.charset='UTF-8';
+    // s1.setAttribute('crossorigin','*');
+    // this.tawkContainer.nativeElement.appendChild(s1);
+  }
+
   // @Input() gradingScaleVisible: boolean = false;
 
   @Output() buttonEvent = new EventEmitter<boolean>();
