@@ -4,20 +4,21 @@ import { BrowserModule, SafeResourceUrl } from '@angular/platform-browser';
 import { AfterViewInit, Input, NgModule, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, HostListener } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, FormControl, ReactiveFormsModule, FormArray, Validators } from '@angular/forms';
 import { GradingScaleComponent } from './grading-scale/grading-scale.component';
 import { RouterModule, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
-@NgModule({
-  imports: [
-    BrowserModule,
-    // import HttpClientModule after BrowserModule.
-    HttpClientModule,
-  ]
-})
+// @NgModule({
+//   imports: [
+//     BrowserModule,
+//     // import HttpClientModule after BrowserModule.
+//     HttpClientModule,
+//   ]
+// })
+
 export class AppModule {}
 
 @Component({
@@ -79,6 +80,18 @@ export class GpaCalcComponent implements AfterViewInit {
   showQ7: boolean = false;
   showQ8: boolean = false;
   showQ9: boolean = false;
+
+  faq_1: boolean = false;
+  faq0: boolean = false;
+  faq1: boolean = false;
+  faq2: boolean = false;
+  faq3: boolean = false;
+  faq4: boolean = false;
+  faq5: boolean = false;
+  faq6: boolean = false;
+  faq7: boolean = false;
+  faq8: boolean = false;
+  faq9: boolean = false;
   
   // boolean variable to show/hide grading scale
   showGradingScale: boolean = false;
@@ -95,6 +108,9 @@ export class GpaCalcComponent implements AfterViewInit {
   gradeFormat: string = "LETTERS";
   /* the semester title from the user input*/ 
   semesterTitle: string= "";
+
+   /* the semester title from the user input*/
+   searchKeyword: string = '';
 
   /* variables for every course name, grade, percentage grade, credit, and course type from the user input */
   
@@ -130,6 +146,17 @@ export class GpaCalcComponent implements AfterViewInit {
   validEighthPercentage: boolean =  true;
 
   // functions in this class
+
+
+  @HostListener('window:beforeunload')
+  onBeforeUnload() {
+    // Perform cleanup or show a confirmation dialog here
+    // For example:
+    // $event.returnValue = true; // Prompt the user with a confirmation dialog
+
+    this.backupScaleTable();
+    this.backupGradeTable();
+  }
 
    // unused (navigates to login page)
    navigateToAnotherURL() {
@@ -229,6 +256,177 @@ export class GpaCalcComponent implements AfterViewInit {
     link.remove(); 
   }
 
+
+  /* construct the content string of grade table */
+  constructGradeTable() {
+    var resultStr = '';
+    for (var i = 0; i < this.gradeTable.length; i++) {
+      resultStr += this.gradeTable[i].courseName;
+      resultStr += ',';
+      resultStr += this.gradeTable[i].grade;
+      resultStr += ',';
+      resultStr += this.gradeTable[i].gradePercent;
+      resultStr += ',';
+      resultStr += this.gradeTable[i].credit;
+      resultStr += ',';
+      resultStr += this.gradeTable[i].type;
+      resultStr += ';';
+    }
+    return resultStr;
+  }
+
+  /* 
+   To implement dynamic backup: backup data table gradeTable anytime the data is changed from the GUI. 
+   steps: 
+   1. encrypt table context.
+   2. we only backup the lastest input of gpa calculator. when backup, save as file name "gradeTableBackup1.txt",  "gradeTableBackup2.txt" and  "gradeTableBackup3.txt"
+   3. removed all older backup files.
+ */
+  backupGradeTable() {
+    let fileName = 'gradeTableBackup1.txt';
+    let fileContent = this.constructGradeTable();
+    const file = new Blob([fileContent], { type: 'text/plain' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(file);
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    // Clean up
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  }
+
+  /* string to hold the selected file content */
+  fileContent: string = '';
+
+  /* read the selected file content into string fileContent */
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    const reader: FileReader = new FileReader();
+
+    reader.onload = (e) => {
+      this.fileContent = reader.result as string;
+    };
+
+    reader.readAsText(file);
+  }
+
+  restoreGradeTableFromBackupFile() {
+    if (this.fileContent) {
+      this.gradeTable.splice(0, this.gradeTable.length);
+      //load this.gradeTable with fileContent string
+      let rowArray = this.fileContent.split(';');
+      for (var i = 0; i < rowArray.length; i++) {
+        // fill rowArray[i];
+        let array = rowArray[i].split(',');
+        if (array.length == 5) {
+          this.gradeTable.push({});
+          this.gradeTable[i].courseName = array[0];
+          this.gradeTable[i].grade = array[1];
+          this.gradeTable[i].gradePercent = array[2];
+          this.gradeTable[i].credit = array[3];
+          this.gradeTable[i].type = array[4];
+        } else {
+          console.log('backupdata is corrupted, no grade table is restored');
+        }
+      }
+    }
+  }
+
+  /* construct the content string of grade table */
+  constructScaleTable() {
+    var resultStr = '';
+    for (var i = 0; i < this.scales.length; i++) {
+      resultStr += this.scales[i].id;
+      resultStr += ',';
+      resultStr += this.scales[i].letterGrade;
+      resultStr += ',';
+      resultStr += this.scales[i].percentGrade;
+      resultStr += ',';
+      resultStr += this.scales[i].percentGradeHi;
+      resultStr += ',';
+      resultStr += this.scales[i].regular;
+      resultStr += ',';
+      resultStr += this.scales[i].honors;
+      resultStr += ',';
+      resultStr += this.scales[i].ap;
+      resultStr += ';';
+    }
+    return resultStr;
+  }
+
+  backupScaleTable() {
+    let fileName = 'scaleTableBackup1.txt';
+    let fileContent = this.constructScaleTable();
+    const file = new Blob([fileContent], { type: 'text/plain' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(file);
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    // Clean up
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  }
+
+  /* string to hold the selected file content */
+  scaleFileContent: string = '';
+
+  /* read the selected file content into string scaleFileContent */
+  onScaleFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    const reader: FileReader = new FileReader();
+
+    reader.onload = (e) => {
+      this.scaleFileContent = reader.result as string;
+    };
+
+    reader.readAsText(file);
+  }
+
+  restoreScaleTableFromBackupFile() {
+    if (this.scaleFileContent) {
+      this.scales.splice(0, this.scales.length);
+      //load this.scales with scaleFileContent string
+      let rowArray = this.scaleFileContent.split(';');
+      for (var i = 0; i < rowArray.length; i++) {
+        // fill rowArray[i];
+        let array = rowArray[i].split(',');
+        if (array.length == 7) {
+          this.scales.push({
+            id: parseInt(array[0]),
+            letterGrade: array[1],
+            percentGrade: parseInt(array[2]),
+            percentGradeHi: parseInt(array[3]),
+            regular: parseInt(array[4]),
+            honors: parseInt(array[5]),
+            ap: parseInt(array[6]),
+          });
+        } else {
+          console.log('backupdata is corrupted, no grade table is restored');
+        }
+      }
+    }
+  }
+
+/*
+  async function encryptAES(text: string, key: string) {
+    const encodedText = new TextEncoder().encode(text);
+    const encodedKey = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(key));
+    const iv = crypto.getRandomValues(new Uint8Array(16));
+    const encryptedData = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, encodedKey, encodedText);
+    return { encryptedData, iv };
+  }
+  
+  async function decryptAES(encryptedData: string, key: string, iv:) {
+    const encodedKey = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(key));
+    const decryptedData = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, encodedKey, encryptedData);
+    return new TextDecoder().decode(decryptedData);
+  }
+*/
+
   
   /*sends you to the google sign-in page*/
   // onSignIn(){
@@ -252,6 +450,97 @@ searchScalesById(id: number)
     console.log("not found!");
   }
   return result;
+}
+
+searchFAQ(key: string) {
+  this.faq_1 = false;
+  this.faq0 = false;
+  this.faq1 = false;
+  this.faq2 = false;
+  this.faq3 = false;
+  this.faq4 = false;
+  this.faq5 = false;
+  this.faq6 = false;
+  this.faq7 = false;
+  this.faq8 = false;
+  this.faq9 = false;
+  if (
+    'How do I use this GPA Calculator'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq_1 = true;
+  }
+  if (
+    'How does the GPA Report work'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq0 = true;
+  }
+  if (
+    'How do I calculate my High School Semester GPA'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq1 = true;
+  }
+  if (
+    'What affect do AP and Honors courses have on my GPA'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq2 = true;
+  }
+  if (
+    'How can I calculate my total GPA (using cumulative GPA)'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq3 = true;
+  }
+  if (
+    'Should I take a lot of AP and Honors courses'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq4 = true;
+  }
+  if (
+    'Is it more important to take more AP and Honors classes or is it more important to have better grades in less challenging classes'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq5 = true;
+  }
+  if (
+    'What is considered a good GPA'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq6 = true;
+  }
+  if (
+    'What is the highest high school GPA possible'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq7 = true;
+  }
+  if (
+    'Is high school GPA important for college'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq8 = true;
+  }
+  if (
+    ' If I have a low GPA, does that mean I cannot go to a good college anymore'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq9 = true;
+  }
 }
 
 

@@ -268,6 +268,20 @@
         </tbody>
       </table>
       <button (click)="addRow()">Add Course</button>
+      <button (click)="backupGradeTable()">Save table data</button>
+      <button (click)="restoreGradeTableFromBackupFile()">
+        restore grade table from the following file:
+      </button>
+
+      <input
+        type="file"
+        (change)="onFileSelected($event)"
+        accept=".txt"
+      />
+      <div *ngIf="fileContent">
+        <h3>File Content:</h3>
+        <pre>{{ fileContent }}</pre>
+      </div>
       </div>
      <br>
       <div id="instructionTitle">
@@ -343,9 +357,326 @@
             </tr>
           </tbody>
         </table>
+        <button (click)="backupScaleTable()">Save scale table data</button>
+        <button (click)="restoreScaleTableFromBackupFile()">
+          restore scale table from the following file:
+        </button>
+
+        <input
+          type="file"
+          (change)="onScaleFileSelected($event)"
+          accept=".txt"
+        />
+        <div *ngIf="scaleFileContent">
+          <h3>File Content:</h3>
+          <pre>{{ scaleFileContent }}</pre>
+        </div>
       </div>
     </div>
   </div>
+
+  <div>
+    <p>Search "Frequently Asked Questions" section.</p>
+  </div>
+  <tr>
+    <td>
+      <input
+        id="searchKeyword"
+        placeholder="Search with keyword"
+        class="form-control"
+        [(ngModel)]="searchKeyword"
+        [ngModelOptions]="{ standalone: true }"
+      />
+    </td>
+    <td>
+      <button (click)="searchFAQ(searchKeyword)">Search</button>
+    </td>
+  </tr>
+
+  <div *ngIf="faq_1" class="entry-content">
+    <button>+ How do I use this GPA Calculator?</button>
+    <div>
+      <p>Follow these steps to calculate your GPA:</p>
+      <ol>
+        <li>
+          (Optional) Input your cumulative GPA and credits. Leave
+          blank if you don't want to fill out current GPA.
+        </li>
+        <li>
+          Input your semester name and choose either Letters or
+          Percentages for the grade format.
+        </li>
+        <li>
+          Fill out the table with grade, credits and course types for
+          each course.
+        </li>
+        <li>
+          You can input up to 8 courses. If you don't need all of
+          them, just leave it blank.
+        </li>
+        <li>Scroll up to see your Semester GPA and Total GPA.</li>
+        <li>
+          Also check out more of the FAQ section for more answers on
+          GPA-related questions.
+        </li>
+      </ol>
+    </div>
+  </div>
+  <br />
+
+  <div *ngIf="faq0" class="entry-content">
+    <button>+ How does the GPA Report work?</button>
+    <div>
+      <p>
+        Our GPA Report feature generates a Customizable GPA Report
+        using your GPA information. You can customize what information
+        is shown on your GPA Report by selecting what you want from
+        the 5 checkboxes. A GPA Report with all of the options
+        selected would show your cumulative GPA, weighted GPA,
+        unweighted GPA, total GPA, and course details. After you have
+        customized what information you want to see on the GPA Report
+        you can give the file a name and an extension. The file name
+        cannot be an empty string, otherwise, an auto-generated name
+        is given to the file. The GPA Report automatically downloads
+        as a TXT file; however, if you want to download the GPA Report
+        as another file type, then you can change the File Extension
+        box. For example, if you want to download the GPA Report as a
+        Microsoft Word document instead of a normal text file, then
+        you can input "docx" into the File Extension box. Once you're
+        done with all of that, you can click the red button to
+        download your GPA Report.
+      </p>
+      <br />
+      <p>
+        Here is an example of what a GPA Report with all of the
+        courses filled out and all of the options selected would look
+        like:
+      </p>
+      <br />
+      <ol id="gpaReportExample">
+        <li>
+          This is the automatically generated GPA report for semester
+          "semester 1"
+        </li>
+        <li>Your Cumulative GPA is 3.3.</li>
+        <li>Your Weighted GPA is 3.44.</li>
+        <li>Your unweighted GPA is 3.</li>
+        <li>Your total GPA is 3.08.</li>
+        <br />
+        <li>Below is the table showing the details:</li>
+        <li>|Course Name | Grade | Credits | Course Type</li>
+        <li>|c1 | A- | 8 | regular |</li>
+        <li>|c2 | B | 7 | honors |</li>
+        <li>|c3 | B- | 6 | ap |</li>
+        <li>|c4 | C | 5 | regular |</li>
+        <li>|c5 | D- | 4 | honors |</li>
+        <li>|c6 | B+ | 9 | ap |</li>
+        <li>|c7 | A- | 8 | regular |</li>
+        <li>|c8 | B+ | 7 | honors |</li>
+      </ol>
+    </div>
+  </div>
+
+  <div *ngIf="faq1" class="entry-content">
+    <button>+ How do I calculate my High School Semester GPA?</button>
+    <div>
+      <p>Follow these steps to calculate your GPA:</p>
+      <ol>
+        <li>
+          Find your grades for each of your courses and list them out.
+          If you only have percentages, convert your percentages into
+          a letter grade for the simplicity of this guide. You can use
+          our grading scale table to convert your percentages into
+          letters.
+        </li>
+        <li>
+          List out the number of credits earned for each of your
+          courses along with your grades.
+        </li>
+        <li>
+          Use our table above to convert your letter grades to points
+          OR if your school uses a different grading scale, ask your
+          school for their own grading scale and use that to convert
+          your letter grades to points. .
+        </li>
+        <li>Add up all your points from each of your courses.</li>
+        <li>
+          Count up how many total credits you earned for the semester.
+        </li>
+        <li>
+          Divide the total amount of points by the total amount of
+          credits.
+        </li>
+        <p>You have now calculated your GPA for the semester.</p>
+        <p>
+          If doing this manually seems like too much work, save the
+          effort by using our GPA calculator to calculate your GPA for
+          you within seconds!
+        </p>
+      </ol>
+    </div>
+  </div>
+
+  <div *ngIf="faq2" class="entry-content">
+    <button>
+      + What affect do AP and Honors courses have on my GPA?
+    </button>
+    <div>
+      <p>
+        AP and Honors courses do not impact your Unweighted GPA,
+        however they are very important for calculating Weighted GPA.
+        AP and Honors courses both add "weight" to your points. What
+        this means is that AP and Honors courses add "extra" points in
+        addition to the points you have already earned for the course.
+        Typically, Honors courses have a weight of +0.5 (meaning 0.5
+        extra points are added to the amount of points earned for that
+        course) and AP courses have a weight of +1.0. This is the
+        weight that this calculator uses, however this may vary from
+        school to school. Some schools do not give the weighted points
+        if you fail the class, meaning a D or below. Talk to your
+        school to understand your school's specific grading scale in
+        terms of AP and Honors classes.
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="faq3" class="entry-content">
+    <button>
+      + How can I calculate my total GPA (using cumulative GPA)?
+    </button>
+    <div>
+      <p>
+        Calculating you total GPA using cumulative GPA is very similar
+        to calculating your semeseter GPA.
+      </p>
+      <ol>
+        <li>
+          Get your cumulative GPA and the amount of credits you have
+          earned so far before the semester. If you are having trouble
+          finding this, your transcipt is a good place to look.
+        </li>
+        <li>
+          Use the same process from calculating your semester GPA to
+          list out your total points & total credits earned for the
+          semester.
+        </li>
+        <li>
+          Add your cumulative GPA with your total points, then add all
+          your credits earned before the semester with the ones you
+          earned for the semester.
+        </li>
+        <li>
+          Divide the sum of your cumulative GPA and the total points
+          with the credits earned so far to get your total GPA.
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <div *ngIf="faq4" class="entry-content">
+    <button>+ Should I take a lot of AP and Honors courses?</button>
+    <div>
+      <p>
+        This decision really depends on your needs. AP & Honors
+        courses are often more difficult and have a lot more course
+        load than normal courses, so if you have many extracurricular
+        commitments or you have not performed well in that certain
+        subject previously, take these into consideration when
+        thinking about taking these courses. You should also consider
+        if you have interest in or if you have performed well in that
+        certain subject. Talking to your teacher about this is
+        essential as they probably know your skills the best and can
+        predict how you would perform in a college-like course.
+        Colleges want to see you work hard and succeed, which some
+        students show by taking AP & Honors courses and some students
+        may not need AP & Honors courses to show this.
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="faq5" class="entry-content">
+    <button>
+      + Is it more important to take more AP and Honors classes or is
+      it more important to have better grades in less challenging
+      classes?
+    </button>
+    <div>
+      <p>
+        Taking AP & Honors classes and having a good GPA are both very
+        important. Colleges want to see you work hard and succeed by
+        taking AP & Honors classes, however, if you are earning C's in
+        these classes, it shows that you are not ready for those
+        challenging classes. However, if you are earning A's or B's in
+        Honors or AP classes, this is generally more favorable than
+        earning A's in less-challenging courses. It really depends on
+        if the course is suitable for you.
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="faq6" class="entry-content">
+    <button>+ What is considered a good GPA?</button>
+    <div>
+      <p>
+        This question is a bit subjective, as it really depends on
+        your goals for high school. High schoolers should aim for a
+        GPA of 3.3 or higher especially if you are interested in
+        attending top-tier colleges like the Ivy League, since a lot
+        those schools consider 3.3 as a minimum. If you want to
+        challenge yourself or aim for Valedictorian, try going for a
+        GPA of 4.0 or even higher(if your school uses a weighted GPA
+        scale)!
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="faq7" class="entry-content">
+    <button>+ What is the highest high school GPA possible?</button>
+    <div>
+      <p>
+        If your school uses an unweighted GPA system, then the highest
+        possible GPA is 4.0. If your school uses a weighted GPA
+        system, it's possible to even reach a GPA of 5.0, however it's
+        highly unlikely.
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="faq8" class="entry-content">
+    <button>+ Is high school GPA important for college?</button>
+    <div>
+      <p>
+        High school GPA is probably one of the most important factors
+        for college admissions. Many colleges have a minimun GPA
+        requirement for admission. The importance of GPA to colleges
+        varies from college to college. Some may emphasize GPA a lot
+        while others may value other factors more. It is best you
+        research individual colleges to understand their admission
+        critieria to get a better understanding of this.
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="faq9" class="entry-content">
+    <button>
+      + If I have a low GPA, does that mean I cannot go to a good
+      college anymore?
+    </button>
+    <div>
+      <p>
+        A low GPA does present some pretty significant challenges for
+        college admissions, however, that doesn't mean you have no
+        chance of making it into a good college anymore. Colleges
+        consider many factors when review applications including
+        extracurriculat activities, essays, recommendation letters,
+        and standardized test scores. However, a low GPA still does
+        present some significant challenges, so you should still try
+        to get a better GPA.
+      </p>
+    </div>
+  </div>
+
+
 <br>
 <br>
 <button 
