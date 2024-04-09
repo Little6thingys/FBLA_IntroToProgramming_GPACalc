@@ -11,14 +11,6 @@ import { GradingScaleComponent } from './grading-scale/grading-scale.component';
 import { RouterModule, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 
-// @NgModule({
-//   imports: [
-//     BrowserModule,
-//     // import HttpClientModule after BrowserModule.
-//     HttpClientModule,
-//   ]
-// })
-
 export class AppModule {}
 
 @Component({
@@ -135,7 +127,7 @@ export class GpaCalcComponent implements AfterViewInit {
   validSeventhCredit: boolean =  true;
   validEighthCredit: boolean =  true;
 
-  /* flags to indicate the percentage grade is valie, it's a number >=0*/
+  /* flags to indicate the percentage grade is valid, it's a number >=0*/
   validFirstPercentage: boolean =  true;
   validSecondPercentage: boolean =  true;
   validThirdPercentage: boolean =  true;
@@ -145,18 +137,17 @@ export class GpaCalcComponent implements AfterViewInit {
   validSeventhPercentage: boolean =  true;
   validEighthPercentage: boolean =  true;
 
+
+  invalidContentGradeTable: boolean = false;
+  noFileSelected: boolean =  false;  
+
+  invalidContentScaleTable: boolean = false;
+  noFileSelectedScale: boolean =  false;  
+
+  inputValueGrade: string = "";
+  inputValueScale: string = "";
+
   // functions in this class
-
-
-  @HostListener('window:beforeunload')
-  onBeforeUnload() {
-    // Perform cleanup or show a confirmation dialog here
-    // For example:
-    // $event.returnValue = true; // Prompt the user with a confirmation dialog
-
-    this.backupScaleTable();
-    this.backupGradeTable();
-  }
 
    // unused (navigates to login page)
    navigateToAnotherURL() {
@@ -210,38 +201,37 @@ export class GpaCalcComponent implements AfterViewInit {
     }
   }
 
-    /*validate credit is a positve integer for GPA report */
-    validateCredit(row: any) {
-      row.validCredit = true;
-      if (row.credit.length == 0) {
-        //do input validation here, if there is empty string, report error on the GUI
+  /*validate credit is a positve integer for GPA report */
+  validateCredit(row: any) {
+    row.validCredit = true;
+    if (row.credit.length == 0) {
+      //do input validation here, if there is empty string, report error on the GUI
+      row.validCredit = false;
+    } else {
+      let number = Number(row.credit);
+      let isInteger = Number.isInteger(number);
+      if (!isInteger || number < 0) {
+        // if this is not a positive integer
         row.validCredit = false;
-      } else {
-        let number = Number(row.credit);
-        let isInteger = Number.isInteger(number);
-        if (!isInteger || number < 0) {
-          // if this is not a positive integer
-          row.validCredit = false;
-        }
       }
     }
-  
-    /*validate percentage grade is valid, it's a number >=0 */
-    validatePerentage(row: any) {
-      row.validPercentage = true;
-      if (row.gradePercent.length == 0) {
-        //do input validation here, if there is empty string, report error on the GUI
-        row.validPercentage = false;
-      } else {
-        let number = Number(row.gradePercent);
-        let isInteger = Number.isInteger(number);
-        if (!isInteger || number < 0) {
-          // if this is not a positive number
-          row.validPercentage = false;
-        }
-      }
-    }
+  }
 
+  /*validate percentage grade is valid, it's a number >=0 */
+  validatePerentage(row: any) {
+    row.validPercentage = true;
+    if (row.gradePercent.length == 0) {
+      //do input validation here, if there is empty string, report error on the GUI
+      row.validPercentage = false;
+    } else {
+      let number = Number(row.gradePercent);
+      let isInteger = Number.isInteger(number);
+      if (!isInteger || number < 0) {
+        // if this is not a positive number
+        row.validPercentage = false;
+      }
+    }
+  }
   
   /* save the generated GPA report to file*/
   onSaveFile()
@@ -276,12 +266,9 @@ export class GpaCalcComponent implements AfterViewInit {
   }
 
   /* 
-   To implement dynamic backup: backup data table gradeTable anytime the data is changed from the GUI. 
-   steps: 
-   1. encrypt table context.
-   2. we only backup the lastest input of gpa calculator. when backup, save as file name "gradeTableBackup1.txt",  "gradeTableBackup2.txt" and  "gradeTableBackup3.txt"
-   3. removed all older backup files.
- */
+  implement dynamic/hot backup: 
+  We only backup the lastest input of gpa calculator. when backup, save as file name "gradeTableBackup1.txt"
+  */
   backupGradeTable() {
     let fileName = 'gradeTableBackup1.txt';
     let fileContent = this.constructGradeTable();
@@ -292,7 +279,6 @@ export class GpaCalcComponent implements AfterViewInit {
     link.download = fileName;
     document.body.appendChild(link);
     link.click();
-    // Clean up
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
   }
@@ -313,24 +299,42 @@ export class GpaCalcComponent implements AfterViewInit {
   }
 
   restoreGradeTableFromBackupFile() {
+    this.invalidContentGradeTable = false;
+    this.noFileSelected =  false;
     if (this.fileContent) {
       this.gradeTable.splice(0, this.gradeTable.length);
       //load this.gradeTable with fileContent string
       let rowArray = this.fileContent.split(';');
-      for (var i = 0; i < rowArray.length; i++) {
-        // fill rowArray[i];
-        let array = rowArray[i].split(',');
-        if (array.length == 5) {
-          this.gradeTable.push({});
-          this.gradeTable[i].courseName = array[0];
-          this.gradeTable[i].grade = array[1];
-          this.gradeTable[i].gradePercent = array[2];
-          this.gradeTable[i].credit = array[3];
-          this.gradeTable[i].type = array[4];
-        } else {
-          console.log('backupdata is corrupted, no grade table is restored');
+      if(rowArray.length >1)
+      {
+        for (var i = 0; i < rowArray.length-1; i++) {
+          // fill rowArray[i];
+          let array = rowArray[i].split(',');
+          if (array.length == 5) {
+            this.gradeTable.push({});
+            this.gradeTable[i].courseName = array[0];
+            this.gradeTable[i].grade = array[1];
+            this.gradeTable[i].gradePercent = array[2];
+            this.gradeTable[i].credit = array[3];
+            this.gradeTable[i].type = array[4];
+            this.gradeTable[i].validCredit = true;
+            this.gradeTable[i].validPercentage =  true;
+          } 
+          else 
+          {
+            this.invalidContentGradeTable = true;
+          }
         }
       }
+      else
+      {
+        this.invalidContentGradeTable = true;
+      } 
+      this.fileContent = "";
+    }
+    else
+    {
+      this.noFileSelected =  true;
     }
   }
 
@@ -356,6 +360,10 @@ export class GpaCalcComponent implements AfterViewInit {
     return resultStr;
   }
 
+  /* 
+  implement dynamic/hot backup: 
+  We only backup the lastest input of scale table. when backup, save as file name "scaleTableBackup1.txt"
+  */
   backupScaleTable() {
     let fileName = 'scaleTableBackup1.txt';
     let fileContent = this.constructScaleTable();
@@ -366,7 +374,6 @@ export class GpaCalcComponent implements AfterViewInit {
     link.download = fileName;
     document.body.appendChild(link);
     link.click();
-    // Clean up
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
   }
@@ -384,34 +391,51 @@ export class GpaCalcComponent implements AfterViewInit {
     };
 
     reader.readAsText(file);
+   
   }
 
   restoreScaleTableFromBackupFile() {
+    this.invalidContentScaleTable = false;
+    this.noFileSelectedScale =  false;
     if (this.scaleFileContent) {
       this.scales.splice(0, this.scales.length);
       //load this.scales with scaleFileContent string
       let rowArray = this.scaleFileContent.split(';');
-      for (var i = 0; i < rowArray.length; i++) {
-        // fill rowArray[i];
-        let array = rowArray[i].split(',');
-        if (array.length == 7) {
-          this.scales.push({
-            id: parseInt(array[0]),
-            letterGrade: array[1],
-            percentGrade: parseInt(array[2]),
-            percentGradeHi: parseInt(array[3]),
-            regular: parseInt(array[4]),
-            honors: parseInt(array[5]),
-            ap: parseInt(array[6]),
-          });
-        } else {
-          console.log('backupdata is corrupted, no grade table is restored');
+      if(rowArray.length >1)
+      {
+        for (var i = 0; i < rowArray.length-1; i++) {
+          // fill rowArray[i];
+          let array = rowArray[i].split(',');
+          if (array.length == 7) {
+            this.scales.push({
+              id: parseInt(array[0]),
+              letterGrade: array[1],
+              percentGrade: parseInt(array[2]),
+              percentGradeHi: parseInt(array[3]),
+              regular: parseInt(array[4]),
+              honors: parseInt(array[5]),
+              ap: parseInt(array[6]),
+            });
+          }
+          else 
+          {
+            this.invalidContentScaleTable = true;
+          }
         }
       }
+      else
+      {
+        this.invalidContentScaleTable = true;
+      }
+      this.scaleFileContent = "";
+    }
+    else
+    {
+      this.noFileSelectedScale =  true;
     }
   }
 
-/*
+ /*
   async function encryptAES(text: string, key: string) {
     const encodedText = new TextEncoder().encode(text);
     const encodedKey = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(key));

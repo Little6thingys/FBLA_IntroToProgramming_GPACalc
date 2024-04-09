@@ -16,10 +16,13 @@ header {
   background-color: rgb(184, 208, 228);
   margin: 0;
   padding: 0;
+}
+
+#buttons{
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
-  height: 50px;
+  height: 60px;
 }
 
 button {
@@ -29,6 +32,20 @@ button {
   font: sans-serif;
   font-weight: bold;
   padding: 50px;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+  transition: color 0.3s;
+  font: sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 80px;
+}
+
+a:hover {
+  color: darkblue;
 }
 
 

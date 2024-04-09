@@ -268,20 +268,31 @@
         </tbody>
       </table>
       <button (click)="addRow()">Add Course</button>
-      <button (click)="backupGradeTable()">Save table data</button>
-      <button (click)="restoreGradeTableFromBackupFile()">
-        restore grade table from the following file:
-      </button>
-
-      <input
-        type="file"
-        (change)="onFileSelected($event)"
-        accept=".txt"
-      />
-      <div *ngIf="fileContent">
-        <h3>File Content:</h3>
-        <pre>{{ fileContent }}</pre>
+     
       </div>
+      <div>
+        <tr>
+        <button id="backupGrade"  (click)="backupGradeTable()">Backup grade table</button>
+        </tr>
+        <br>
+        <tr>
+          <button id="restoreGrade" (click)="restoreGradeTableFromBackupFile()">
+            Restore grade table from the following file:
+          </button>
+          
+          <input id="fileSelectGrade"
+          type="file" width="480px"
+          (change)="onFileSelected($event)"
+          accept=".txt"
+        />
+        <div id="errorDiv" *ngIf="this.invalidContentGradeTable">
+          Backup file data is corrupted, no grade table is restored!
+        </div>
+        <div id="errorDiv" *ngIf="this.noFileSelected">
+          No file is selected, please select one file!
+        </div>
+        </tr>
+        
       </div>
      <br>
       <div id="instructionTitle">
@@ -357,26 +368,37 @@
             </tr>
           </tbody>
         </table>
-        <button (click)="backupScaleTable()">Save scale table data</button>
-        <button (click)="restoreScaleTableFromBackupFile()">
-          restore scale table from the following file:
-        </button>
 
-        <input
-          type="file"
-          (change)="onScaleFileSelected($event)"
-          accept=".txt"
-        />
-        <div *ngIf="scaleFileContent">
-          <h3>File Content:</h3>
-          <pre>{{ scaleFileContent }}</pre>
+        <div>
+          <tr>
+           <button  id="backupScale"(click)="backupScaleTable()">Backup scale table</button>
+          </tr>
+          <br>
+          <tr>
+            <button id="restoreScale" (click)="restoreScaleTableFromBackupFile()">
+              restore scale table from the following file:
+            </button>
+            
+            <input id="fileSelectScale"
+            type="file" width="480px" 
+            (change)="onScaleFileSelected($event)"
+            accept=".txt"
+           />
+           <div id="errorDiv" *ngIf="this.invalidContentScaleTable">
+            Backup file data is corrupted, no scale table is restored!
+          </div>
+          <div id="errorDiv" *ngIf="this.noFileSelectedScale">
+            No file is selected, please select one file!
+          </div>
+          </tr>
         </div>
-      </div>
+     
+       </div>
     </div>
   </div>
 
-  <div>
-    <p>Search "Frequently Asked Questions" section.</p>
+  <div id="instructionTitle">
+    <h4> Search "Frequently Asked Questions" section: </h4>
   </div>
   <tr>
     <td>

@@ -102,6 +102,7 @@ input {
 #errorDiv
 {
 color:crimson;
+text-align: left;
 }
 
 label {
@@ -111,6 +112,20 @@ label {
 
 input {
   width: 170px;
+  padding: 8px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+#fileSelectGrade {
+  width: 380px;
+  padding: 8px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+#fileSelectScale {
+  width: 380px;
   padding: 8px;
   margin-bottom: 15px;
   box-sizing: border-box;
@@ -126,6 +141,58 @@ button {
   border-radius: 4px;
   font-weight: bold;
   font-size: 17px;
+}
+
+#backupGrade
+{
+  background-color: #2b179e;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  text-transform: unset !important;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+#backupScale
+{
+  background-color: #2b179e;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  text-transform: unset !important;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+#restoreGrade
+{
+  background-color: #093d39;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  text-transform: unset !important;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+#restoreScale
+{
+  background-color: #093d39;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  text-transform: unset !important;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 #gradingScaleButton {

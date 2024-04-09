@@ -71,13 +71,16 @@ input {
   text-align: left;
 }
 
-#instructionTitle
-{
+#instructionTitle{
   background-color: rgb(176, 202, 60);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(118, 224, 104, 0.1);
   text-align: left;
+}
+
+#about {
+  text-align: center;
 }
 
 #semesterTitle {
