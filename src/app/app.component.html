@@ -1,12 +1,14 @@
 <div id="tab-bar">
-  
-  <div id="buttons">
+  <span id="logo">
+    <img ngSrc="mustangGPACalcLogo-Small.png">
+  </span>
+  <span id="buttons">
     <ul>
-      <a routerLink="/gpa-calc" routerLinkActive="active">GPA Calculator</a>
-      <a routerLink="/google-classroom/login" routerLinkActive="active">Google Classroom GPA Calculator</a>
-      <a routerLink="/help" routerLinkActive="active">Help</a>
+      <button routerLink="/gpa-calc" routerLinkActive="active">Main Page</button>
+      <button routerLink="/google-classroom/login" routerLinkActive="active">Google Classroom Calculator</button>
+      <button routerLink="/help" routerLinkActive="active">Help</button>
     </ul>
-  </div>
+  </span>
 </div>  
 <router-outlet></router-outlet>
 <div #tawkContainer></div>

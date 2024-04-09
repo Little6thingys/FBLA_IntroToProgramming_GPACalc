@@ -13,25 +13,36 @@ header {
 
 #tab-bar{
   font-family: Arial, sans-serif;
-  background-color: rgb(184, 208, 228);
+  background-color: rgb(103, 136, 163);
   margin: 0;
   padding: 0;
+  height: 60px;
 }
 
-#buttons{
-  display: flex;
-  justify-content: flex-end;
+#logo{
+  float: left;
   align-items: center;
   height: 60px;
 }
 
+#buttons{
+  float: right;
+  align-items: center;
+}
+
 button {
   border: none;
-  background-color: transparent;
+  background-color: rgb(103, 136, 163);
   font-size: 16px;
   font: sans-serif;
+  color: white;
   font-weight: bold;
-  padding: 50px;
+  padding: 0px 25px;
+  height: 60px;
+}
+
+button:hover {
+  background-color: rgb(63, 83, 99);
 }
 
 a {

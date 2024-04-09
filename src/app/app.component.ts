@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 //import { GoogleApiService } from './google-api.service';
 import { NgModule } from "@angular/core";
-
+import { NgOptimizedImage } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({
@@ -18,6 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
     GradingScaleComponent,
     CommonModule,
     RouterModule,
+    NgOptimizedImage
   ],
   templateUrl: './app.component.html',
 //   template: `<main>
