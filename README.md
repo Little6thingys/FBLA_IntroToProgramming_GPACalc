@@ -34,13 +34,13 @@ This GPA Calculator is a student-created project for the Introduction to Program
 ## How to Use
 
 
-1.(Optional) Input your cumulative GPA and credit. Leave blank if you don't want to fill out current GPA.
-2.Refer the GPA scale table, and update this table if you need to.
-3.Input your semester name and choose either Letters or Percentages for the grade format.
-4.Click "Add course", fill out the table with grade, credits and course types for each course.
-5.You can dynamically input as many courses as you want. Also you can change your input or remove courses at any time.
-6.Scroll up to see your Semester GPA and Total GPA.
-7.Also check out more of the FAQ section for more answers on GPA-related questions.
+1. (Optional) Input your cumulative GPA and credit. Leave blank if you don't want to fill out current GPA.
+2. Refer the GPA scale table, and update this table if you need to.
+3. Input your semester name and choose either Letters or Percentages for the grade format.
+4. Click "Add course", fill out the table with grade, credits and course types for each course.
+5. You can dynamically input as many courses as you want. Also you can change your input or remove courses at any time.
+6. Scroll up to see your Semester GPA and Total GPA.
+7. Also check out more of the FAQ section for more answers on GPA-related questions.
 
 ## Technologies Used
 
@@ -49,7 +49,8 @@ This GPA Calculator is a student-created project for the Introduction to Program
 - CSS3
 - Typescript
 - Google Classroom API service
-- stackblitz
+- Stackblitz
+- Visual Studio Code
 
 
 ## Acknowledgements

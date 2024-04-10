@@ -46,7 +46,8 @@ This GPA Calculator is a student-created project for the Introduction to Program
 - CSS3
 - Typescript
 - Google Classroom API service
-- stackblitz
+- Stackblitz
+- Visual Studio Code
 
 
 ## Acknowledgements
