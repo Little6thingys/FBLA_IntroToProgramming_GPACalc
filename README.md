@@ -5,13 +5,17 @@ It allows users to input their course grades and credits to determine their GPA.
 
 This GPA Calculator is a student-created project for the Introduction to Programming FBLA Competition. 
       <br>
-      &nbsp; &nbsp; Use this GPA calculator to calculate your GPA by entering your grade/percentage, credits earned, and course type for each course you have. 
       <br>
-      &nbsp; &nbsp; This GPA calculator also include a new Google Classroom-powered GPA calculator that can access your grades directly from Schoology to more accurately calculate your GPA and perform other tasks.
+      Use this GPA calculator to calculate your GPA by entering your grade/percentage, credits earned, and course type for each course you have. 
       <br>
-      &nbsp; &nbsp; This GPA calculator has additional features such as the ability to edit the GPA scale, download a report of the information you filled in and a changeable grading scale to better fit your school's specific grading system.
       <br>
-      &nbsp; &nbsp; We provide interactive online help as well as FAQ search function.
+      This GPA calculator also include a new Google Classroom-powered GPA calculator that can access your grades directly from Schoology to more accurately calculate your GPA and perform other tasks.
+      <br>
+      <br>
+      This GPA calculator has additional features such as the ability to edit the GPA scale, download a report of the information you filled in and a changeable grading scale to better fit your school's specific grading system.
+      <br>
+      <br>
+      We provide interactive online help as well as FAQ search function.
 
 ## Features
 
@@ -22,7 +26,7 @@ This GPA Calculator is a student-created project for the Introduction to Program
 - Provide grade scale table for user to reference
 - Provide the ability to update the GPA scale table
 - Provide persistent data storage for user input course information and the updated GPA scale table, equiped with dynamically/hot backup and restore mechanism
-- Provide interactive help menu powered by ?? and interactive FAQ search engine.
+- Provide interactive help menu powered by tawk.to and interactive FAQ search engine.
 - Provide FAQ sections for instructions and questions 
 - User-friendly interface for easy input and calculation
 

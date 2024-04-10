@@ -23,7 +23,7 @@ This GPA Calculator is a student-created project for the Introduction to Program
 - Provide grade scale table for user to reference
 - Provide the ability to update the GPA scale table
 - Provide persistent data storage for user input course information and the updated GPA scale table, equiped with dynamically/hot backup and restore mechanism
-- Provide interactive help menu powered by ?? and interactive FAQ search engine.
+- Provide interactive help menu powered by tawk.to and interactive FAQ search engine.
 - Provide FAQ sections for instructions and questions 
 - User-friendly interface for easy input and calculation
 
