@@ -7,8 +7,7 @@ This GPA Calculator is a student-created project for the Introduction to Program
       <br>
       &nbsp; &nbsp; Use this GPA calculator to calculate your GPA by entering your grade/percentage, credits earned, and course type for each course you have. 
       <br>
-      &nbsp; &nbsp; This GPA calculator also include a new Google Classroom-powered GPA calculator that can access your grades directly from Schoology to more accurately calculate your GPA and perform other tasks. 
-      
+      &nbsp; &nbsp; This GPA calculator also include a new Google Classroom-powered GPA calculator that can access your grades directly from Schoology to more accurately calculate your GPA and perform other tasks.
       <br>
       &nbsp; &nbsp; This GPA calculator has additional features such as the ability to edit the GPA scale, download a report of the information you filled in and a changeable grading scale to better fit your school's specific grading system.
       <br>
