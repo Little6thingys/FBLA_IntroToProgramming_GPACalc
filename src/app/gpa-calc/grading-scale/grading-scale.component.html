@@ -1,0 +1,81 @@
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+<body> 
+    <div class="modal">
+        <div class="modal__inner">
+            <div class="modal__top">
+                <div class="modal__title"> 
+                    <b> Grading Scale Editor </b>
+                </div>
+                <button class="modal__close" type="button" (click)="sendCloseGS()">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="modal__content">
+                <h1> Default </h1>
+                <hr />
+                <p>
+                    This is the default grading scale.
+                </p>
+                <br>
+                <div>
+                    <table id = "unweightedGradingScale">
+                      <thead>
+                        <tr class = "tableRow">
+                          <th class = "tableHeader" scope="col">Letter Grade</th>
+                          <th class = "tableHeader" scope="col">Percent Grade low</th>
+                          <th class = "tableHeader" scope="col">Percent Grade high</th>
+                          <th class = "tableHeader" scope="col">Regular</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!--
+                        <tr *ngFor="let scale of scales">
+                          <td>{{ scale.letterGrade }}</td>
+                          <td>{{ scale.percentGrade }} - {{ scale.percentGradeHi }}</td>
+                          <td>{{ scale.regular }}</td>
+                          <td>{{ scale.honors }}</td>
+                          <td>{{ scale.ap }}</td>
+                        </tr>
+                      -->
+                        <tr class = "tableRow" *ngFor="let scale of scales; let i = index" (click)="editItem(i)">
+                          <td class = "tableCell">
+                            <ng-container>
+                              <input class="letterInput" type="text" id="unweightedLetter{{i}}" value="{{ scales[i].letterGrade }}"/>
+                            </ng-container>
+                          </td>
+                          <td class = "tableCell">
+                            <ng-container>
+                              <input class="percentInput" type="text" id="unweightedPercentLow{{i}}" value="{{ scales[i].percentGrade }}" /> % -
+                            </ng-container>
+                          </td>
+                          <td class = "tableCell">
+                            <ng-container>
+                              <input class="percentInput" type="text" id="unweightedPercentHigh{{i}}" value="{{ scales[i].percentGradeHi}}" /> %
+                            </ng-container>
+                          </td>
+                          <td class = "tableCell">
+                            <ng-container>
+                              <input class="regularInput" type="text" id="unweightedRegular{{i}}" value="{{ scales[i].regular }}" />
+                            </ng-container>
+                          </td>
+                         
+                         
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+            </div>
+            <div class="modal__bottom">
+                <button class="modal__save" (click)="save()">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+

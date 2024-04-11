@@ -11,6 +11,54 @@ header {
   padding: var(--content-padding);
 }
 
+#tab-bar{
+  font-family: Arial, sans-serif;
+  background-color: rgb(47, 67, 40);
+  margin: 0;
+  padding: 0;
+  height: 60px;
+}
+
+#logo{
+  float: left;
+  align-items: center;
+  height: 60px;
+}
+
+#buttons{
+  float: right;
+  align-items: center;
+}
+
+button {
+  border: none;
+  background-color: rgb(47, 67, 40);
+  font-size: 16px;
+  font: sans-serif;
+  color: white;
+  font-weight: bold;
+  padding: 0px 25px;
+  height: 60px;
+}
+
+button:hover {
+  background-color: rgb(63, 83, 99);
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+  transition: color 0.3s;
+  font: sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 80px;
+}
+
+a:hover {
+  color: darkblue;
+}
+
 
 /*
 Copyright Google LLC. All Rights Reserved.

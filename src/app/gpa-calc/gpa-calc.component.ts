@@ -1,26 +1,61 @@
 /* This component defines the variables and functions used for this GPA calculator */
 import { scales } from '../scales';
 import { BrowserModule, SafeResourceUrl } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { AfterViewInit, Input, NgModule, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, HostListener } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup, FormControl, ReactiveFormsModule, FormArray, Validators } from '@angular/forms';
+import { GradingScaleComponent } from './grading-scale/grading-scale.component';
+import { RouterModule, Router } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
+export class AppModule {}
 
 @Component({
   selector: 'app-gpa-calc',
   standalone: true,
-  imports: [FormsModule, CommonModule,ReactiveFormsModule],
+  imports: [
+    FormsModule, 
+    CommonModule,
+    ReactiveFormsModule,
+    GradingScaleComponent,
+    RouterModule,
+  ],
   templateUrl: './gpa-calc.component.html',
   styleUrl: './gpa-calc.component.css'
 })
 
 
-export class GpaCalcComponent {
+export class GpaCalcComponent implements AfterViewInit {
+  // @ViewChild('tawkContainer') tawkContainer!: ElementRef;
+
+  ngAfterViewInit(): void {
+    // const s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    // s1.type = 'text/javascript';
+    // s1.async=true;
+    // s1.src='https://embed.tawk.to/661315dca0c6737bd12949a5/1hqt8qprg';
+    // s1.charset='UTF-8';
+    // s1.setAttribute('crossorigin','*');
+    // this.tawkContainer.nativeElement.appendChild(s1);
+  }
+
+  // @Input() gradingScaleVisible: boolean = false;
+
+  @Output() buttonEvent = new EventEmitter<boolean>();
+
+  constructor(private router: Router){}
 
   // variables in this class
+
+  // array that holds the information for the course information
+  gradeTable: any[] = [];
+
+  // variables for editing the grading scale
+  editIndex: number | null = null;
+  editedItem: any = {};
+  
   /* scale table object used for html display */
   scales = [...scales];
 
@@ -38,6 +73,20 @@ export class GpaCalcComponent {
   showQ8: boolean = false;
   showQ9: boolean = false;
 
+  faq_1: boolean = false;
+  faq0: boolean = false;
+  faq1: boolean = false;
+  faq2: boolean = false;
+  faq3: boolean = false;
+  faq4: boolean = false;
+  faq5: boolean = false;
+  faq6: boolean = false;
+  faq7: boolean = false;
+  faq8: boolean = false;
+  faq9: boolean = false;
+  
+  // boolean variable to show/hide grading scale
+  showGradingScale: boolean = false;
 
   /* flag to show if the file name or file extension is valid */
   validFileName: boolean = true;
@@ -52,57 +101,13 @@ export class GpaCalcComponent {
   /* the semester title from the user input*/ 
   semesterTitle: string= "";
 
+  /* the semester title from the user input*/
+  searchKeyword: string = '';
+
   /* variables for every course name, grade, percentage grade, credit, and course type from the user input */
-  firstCourseName: string = "";
-  firstGrade: number = 1;
-  firstGradePercent: string = "93";
-  firstCredit: string = "0";
-  firstType: string = "regular";
-
-  secondCourseName: string = "";
-  secondGrade: number = 1;
-  secondGradePercent: string = "93";
-  secondCredit: string = "0";
-  secondType: string = "regular";
-
-  thirdCourseName: string = "";
-  thirdGrade: number = 1;
-  thirdGradePercent: string = "93";
-  thirdCredit: string = "0";
-  thirdType: string = "regular";
-
-  fourthCourseName: string = "";
-  fourthGrade: number = 1;
-  fourthGradePercent: string = "93";
-  fourthCredit: string = "0";
-  fourthType: string = "regular";
-
-  fifthCourseName: string = "";
-  fifthGrade: number = 1;
-  fifthGradePercent: string = "93";
-  fifthCredit: string = "0";
-  fifthType: string = "regular";
-
-  sixthCourseName: string = "";
-  sixthGrade: number = 1;
-  sixthGradePercent: string = "93";
-  sixthCredit: string = "0";
-  sixthType: string = "regular";
-
-  seventhCourseName: string = "";
-  seventhGrade: number = 1;
-  seventhGradePercent: string = "93";
-  seventhCredit: string = "0";
-  seventhType: string = "regular";
-
-  eighthCourseName: string = "";
-  eighthGrade: number = 1;
-  eighthGradePercent: string = "93";
-  eighthCredit: string = "0";
-  eighthType: string = "regular";
-
+  
   /* the file name and file extension to generate GPA report from the user input */
-  saveFileName: string = "";
+  saveFileName: string = "fileName";
   saveFileExtension: string = '';
 
   /* checkbox values for the options to be included in the GPA report from the user input checkboxes */
@@ -122,7 +127,7 @@ export class GpaCalcComponent {
   validSeventhCredit: boolean =  true;
   validEighthCredit: boolean =  true;
 
-  /* flags to indicate the percentage grade is valie, it's a number >=0*/
+  /* flags to indicate the percentage grade is valid, it's a number >=0*/
   validFirstPercentage: boolean =  true;
   validSecondPercentage: boolean =  true;
   validThirdPercentage: boolean =  true;
@@ -132,7 +137,58 @@ export class GpaCalcComponent {
   validSeventhPercentage: boolean =  true;
   validEighthPercentage: boolean =  true;
 
+
+  invalidContentGradeTable: boolean = false;
+  noFileSelected: boolean =  false;  
+
+  invalidContentScaleTable: boolean = false;
+  noFileSelectedScale: boolean =  false;  
+
+  inputValueGrade: string = "";
+  inputValueScale: string = "";
+
   // functions in this class
+
+   // unused (navigates to login page)
+   navigateToAnotherURL() {
+    this.router.navigate(['/google-classroom/login']);
+  }
+
+  // recieves command to close the grading scale
+  receiveCloseGS($event: boolean) {
+    this.showGradingScale = $event;
+  }
+
+  // adds a row to the course information table
+   addRow() {
+      this.gradeTable.push({}); // Add an empty row
+      this.gradeTable[this.gradeTable.length - 1].courseName = "";
+      this.gradeTable[this.gradeTable.length - 1].grade = 1;
+      this.gradeTable[this.gradeTable.length - 1].gradePercent = 93;
+      this.gradeTable[this.gradeTable.length - 1].credit = 0;
+      this.gradeTable[this.gradeTable.length - 1].type = "regular";
+      this.gradeTable[this.gradeTable.length - 1].validPercentage = true;
+      this.gradeTable[this.gradeTable.length - 1].validCredit = true;
+   }
+ 
+   // removes a row from the course information table
+   removeRow(index: number) {
+     this.gradeTable.splice(index, 1); // Remove row at the specified index
+   }
+ 
+   // saves information about selected row of the grading scale table
+   editItem(index: number) {
+     this.editIndex = index;
+     this.editedItem = { ...this.scales[index] };
+   }
+ 
+   // saves the edits made to a row in the grading scale table
+   saveChanges(index: number) {
+     if (this.editIndex !== null) {
+       this.scales[index] = { ...this.editedItem };
+       this.editIndex = null;
+     }
+   }
 
   /*validate file name for GPA report */
   validateFileName()
@@ -146,312 +202,37 @@ export class GpaCalcComponent {
   }
 
   /*validate credit is a positve integer for GPA report */
-  validateFirstCredit()
-  {
-    this.validFirstCredit = true;
-    if(this.firstCredit.length == 0)
-    {
+  validateCredit(row: any) {
+    row.validCredit = true;
+    if (row.credit.length == 0) {
       //do input validation here, if there is empty string, report error on the GUI
-      this.validFirstCredit = false;
-    }
-    else
-    {
-      let number = Number(this.firstCredit);
+      row.validCredit = false;
+    } else {
+      let number = Number(row.credit);
       let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive integer
-        this.validFirstCredit = false;
-      }
-    }
-  }
-
- /*validate credit is a positve integer for GPA report */
- validateSecondCredit()
- {
-   this.validSecondCredit = true;
-   if(this.secondCredit.length == 0)
-   {
-     //do input validation here, if there is empty string, report error on the GUI
-     this.validSecondCredit = false;
-   }
-   else
-   {
-     let number = Number(this.secondCredit);
-     let isInteger = Number.isInteger(number);
-     if(!isInteger || (number < 0))
-     { // if this is not a positive integer
-       this.validSecondCredit = false;
-     }
-   }
- }
-
-  validateThirdCredit()
-  {
-    this.validThirdCredit = true;
-    if(this.thirdCredit.length == 0)
-    {
-      //do input validation here, if there is empty string, report error on the GUI
-      this.validThirdCredit = false;
-    }
-    else
-    {
-      let number = Number(this.thirdCredit);
-      let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive integer
-        this.validThirdCredit = false;
-      }
-    }
-  }
- 
-  validateFourthCredit()
-  {
-    this.validFourthCredit = true;
-    if(this.fourthCredit.length == 0)
-    {
-      //do input validation here, if there is empty string, report error on the GUI
-      this.validFourthCredit = false;
-    }
-    else
-    {
-      let number = Number(this.fourthCredit);
-      let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive integer
-        this.validFourthCredit = false;
-      }
-    }
-  }
-
-  validateFifthCredit()
-  {
-    this.validFifthCredit = true;
-    if(this.fifthCredit.length == 0)
-    {
-      //do input validation here, if there is empty string, report error on the GUI
-      this.validFifthCredit = false;
-    }
-    else
-    {
-      let number = Number(this.fifthCredit);
-      let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive integer
-        this.validFifthCredit = false;
-      }
-    }
-  }
-
-  validateSixthCredit()
-  {
-    this.validSixthCredit = true;
-    if(this.sixthCredit.length == 0)
-    {
-      //do input validation here, if there is empty string, report error on the GUI
-      this.validSixthCredit = false;
-    }
-    else
-    {
-      let number = Number(this.sixthCredit);
-      let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive integer
-        this.validSixthCredit = false;
-      }
-    }
-  }
-
-  validateSeventhCredit()
-  {
-    this.validSeventhCredit = true;
-    if(this.seventhCredit.length == 0)
-    {
-      //do input validation here, if there is empty string, report error on the GUI
-      this.validSeventhCredit = false;
-    }
-    else
-    {
-      let number = Number(this.seventhCredit);
-      let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive integer
-        this.validSeventhCredit = false;
-      }
-    }
-  }
-
-  validateEighthCredit()
-  {
-    this.validEighthCredit = true;
-    if(this.eighthCredit.length == 0)
-    {
-      //do input validation here, if there is empty string, report error on the GUI
-      this.validEighthCredit = false;
-    }
-    else
-    {
-      let number = Number(this.eighthCredit);
-      let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive integer
-        this.validEighthCredit = false;
+      if (!isInteger || number < 0) {
+        // if this is not a positive integer
+        row.validCredit = false;
       }
     }
   }
 
   /*validate percentage grade is valid, it's a number >=0 */
-  validateFirstPerentage()
-  {
-    this.validFirstPercentage = true;
-    if(this.firstGradePercent.length == 0)
-    {
+  validatePerentage(row: any) {
+    row.validPercentage = true;
+    if (row.gradePercent.length == 0) {
       //do input validation here, if there is empty string, report error on the GUI
-      this.validFirstPercentage = false;
-    }
-    else
-    {
-      let number = Number(this.firstGradePercent);
+      row.validPercentage = false;
+    } else {
+      let number = Number(row.gradePercent);
       let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive number
-        this.validFirstPercentage = false;
+      if (!isInteger || number < 0) {
+        // if this is not a positive number
+        row.validPercentage = false;
       }
     }
   }
-
-  validateSecondPerentage()
-  {
-    this.validSecondPercentage = true;
-    if(this.secondGradePercent.length == 0)
-    {
-      //do input validation here, if there is empty string, report error on the GUI
-      this.validSecondPercentage = false;
-    }
-    else
-    {
-      let number = Number(this.secondGradePercent);
-      let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive number
-        this.validSecondPercentage = false;
-      }
-    }
-  }
-
-  validateThirdPerentage()
-  {
-    this.validThirdPercentage = true;
-    if(this.thirdGradePercent.length == 0)
-    {
-      //do input validation here, if there is empty string, report error on the GUI
-      this.validThirdPercentage = false;
-    }
-    else
-    {
-      let number = Number(this.thirdGradePercent);
-      let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive number
-        this.validThirdPercentage = false;
-      }
-    }
-  }
-
-  validateFourthPerentage()
-  {
-    this.validFourthPercentage = true;
-    if(this.fourthGradePercent.length == 0)
-    {
-      //do input validation here, if there is empty string, report error on the GUI
-      this.validFourthPercentage = false;
-    }
-    else
-    {
-      let number = Number(this.fourthGradePercent);
-      let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive number
-        this.validFourthPercentage = false;
-      }
-    }
-  }
-
-  validateFifthPerentage()
-  {
-    this.validFifthPercentage = true;
-    if(this.fifthGradePercent.length == 0)
-    {
-      //do input validation here, if there is empty string, report error on the GUI
-      this.validFifthPercentage = false;
-    }
-    else
-    {
-      let number = Number(this.fifthGradePercent);
-      let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive number
-        this.validFifthPercentage = false;
-      }
-    }
-  }
-
-  validateSixthPerentage()
-  {
-    this.validSixthPercentage = true;
-    if(this.sixthGradePercent.length == 0)
-    {
-      //do input validation here, if there is empty string, report error on the GUI
-      this.validSixthPercentage = false;
-    }
-    else
-    {
-      let number = Number(this.sixthGradePercent);
-      let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive number
-        this.validSixthPercentage = false;
-      }
-    }
-  }
-
-  validateSeventhPerentage()
-  {
-    this.validSeventhPercentage = true;
-    if(this.seventhGradePercent.length == 0)
-    {
-      //do input validation here, if there is empty string, report error on the GUI
-      this.validSeventhPercentage = false;
-    }
-    else
-    {
-      let number = Number(this.seventhGradePercent);
-      let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive number
-        this.validSeventhPercentage = false;
-      }
-    }
-  }
-
-  validateEighthPerentage()
-  {
-    this.validEighthPercentage = true;
-    if(this.eighthGradePercent.length == 0)
-    {
-      //do input validation here, if there is empty string, report error on the GUI
-      this.validEighthPercentage = false;
-    }
-    else
-    {
-      let number = Number(this.eighthGradePercent);
-      let isInteger = Number.isInteger(number);
-      if(!isInteger || (number < 0))
-      { // if this is not a positive number
-        this.validEighthPercentage = false;
-      }
-    }
-  }
-
+  
   /* save the generated GPA report to file*/
   onSaveFile()
   {
@@ -466,15 +247,225 @@ export class GpaCalcComponent {
   }
 
 
+  /* construct the content string of grade table */
+  constructGradeTable() {
+    var resultStr = '';
+    for (var i = 0; i < this.gradeTable.length; i++) {
+      resultStr += this.gradeTable[i].courseName;
+      resultStr += ',';
+      resultStr += this.gradeTable[i].grade;
+      resultStr += ',';
+      resultStr += this.gradeTable[i].gradePercent;
+      resultStr += ',';
+      resultStr += this.gradeTable[i].credit;
+      resultStr += ',';
+      resultStr += this.gradeTable[i].type;
+      resultStr += ';';
+    }
+    return resultStr;
+  }
+
+  /* 
+  implement dynamic/hot backup: 
+  We only backup the lastest input of gpa calculator. when backup, save as file name "gradeTableBackup1.txt"
+  */
+  backupGradeTable() {
+    let fileName = 'gradeTableBackup1.txt';
+    let fileContent = this.constructGradeTable();
+    const file = new Blob([fileContent], { type: 'text/plain' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(file);
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  }
+
+  /* string to hold the selected file content */
+  fileContent: string = '';
+
+  /* read the selected file content into string fileContent */
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    const reader: FileReader = new FileReader();
+
+    reader.onload = (e) => {
+      this.fileContent = reader.result as string;
+    };
+
+    reader.readAsText(file);
+  }
+
+  restoreGradeTableFromBackupFile() {
+    this.invalidContentGradeTable = false;
+    this.noFileSelected =  false;
+    if (this.fileContent) {
+      this.gradeTable.splice(0, this.gradeTable.length);
+      //load this.gradeTable with fileContent string
+      let rowArray = this.fileContent.split(';');
+      if(rowArray.length >1)
+      {
+        for (var i = 0; i < rowArray.length-1; i++) {
+          // fill rowArray[i];
+          let array = rowArray[i].split(',');
+          if (array.length == 5) {
+            this.gradeTable.push({});
+            this.gradeTable[i].courseName = array[0];
+            this.gradeTable[i].grade = array[1];
+            this.gradeTable[i].gradePercent = array[2];
+            this.gradeTable[i].credit = array[3];
+            this.gradeTable[i].type = array[4];
+            this.gradeTable[i].validCredit = true;
+            this.gradeTable[i].validPercentage =  true;
+          } 
+          else 
+          {
+            this.invalidContentGradeTable = true;
+          }
+        }
+      }
+      else
+      {
+        this.invalidContentGradeTable = true;
+      } 
+      this.fileContent = "";
+    }
+    else
+    {
+      this.noFileSelected =  true;
+    }
+  }
+
+  /* construct the content string of grade table */
+  constructScaleTable() {
+    var resultStr = '';
+    for (var i = 0; i < this.scales.length; i++) {
+      resultStr += this.scales[i].id;
+      resultStr += ',';
+      resultStr += this.scales[i].letterGrade;
+      resultStr += ',';
+      resultStr += this.scales[i].percentGrade;
+      resultStr += ',';
+      resultStr += this.scales[i].percentGradeHi;
+      resultStr += ',';
+      resultStr += this.scales[i].regular;
+      resultStr += ',';
+      resultStr += this.scales[i].honors;
+      resultStr += ',';
+      resultStr += this.scales[i].ap;
+      resultStr += ';';
+    }
+    return resultStr;
+  }
+
+  /* 
+  implement dynamic/hot backup: 
+  We only backup the lastest input of scale table. when backup, save as file name "scaleTableBackup1.txt"
+  */
+  backupScaleTable() {
+    let fileName = 'scaleTableBackup1.txt';
+    let fileContent = this.constructScaleTable();
+    const file = new Blob([fileContent], { type: 'text/plain' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(file);
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  }
+
+  /* string to hold the selected file content */
+  scaleFileContent: string = '';
+
+  /* read the selected file content into string scaleFileContent */
+  onScaleFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    const reader: FileReader = new FileReader();
+
+    reader.onload = (e) => {
+      this.scaleFileContent = reader.result as string;
+    };
+
+    reader.readAsText(file);
+   
+  }
+
+  restoreScaleTableFromBackupFile() {
+    this.invalidContentScaleTable = false;
+    this.noFileSelectedScale =  false;
+    if (this.scaleFileContent) {
+      this.scales.splice(0, this.scales.length);
+      //load this.scales with scaleFileContent string
+      let rowArray = this.scaleFileContent.split(';');
+      if(rowArray.length >1)
+      {
+        for (var i = 0; i < rowArray.length-1; i++) {
+          // fill rowArray[i];
+          let array = rowArray[i].split(',');
+          if (array.length == 7) {
+            this.scales.push({
+              id: parseInt(array[0]),
+              letterGrade: array[1],
+              percentGrade: parseInt(array[2]),
+              percentGradeHi: parseInt(array[3]),
+              regular: parseInt(array[4]),
+              honors: parseInt(array[5]),
+              ap: parseInt(array[6]),
+            });
+          }
+          else 
+          {
+            this.invalidContentScaleTable = true;
+          }
+        }
+      }
+      else
+      {
+        this.invalidContentScaleTable = true;
+      }
+      this.scaleFileContent = "";
+    }
+    else
+    {
+      this.noFileSelectedScale =  true;
+    }
+  }
+
+ /*
+  async function encryptAES(text: string, key: string) {
+    const encodedText = new TextEncoder().encode(text);
+    const encodedKey = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(key));
+    const iv = crypto.getRandomValues(new Uint8Array(16));
+    const encryptedData = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, encodedKey, encodedText);
+    return { encryptedData, iv };
+  }
+  
+  async function decryptAES(encryptedData: string, key: string, iv:) {
+    const encodedKey = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(key));
+    const decryptedData = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, encodedKey, encryptedData);
+    return new TextDecoder().decode(decryptedData);
+  }
+*/
+
+  
+  /*sends you to the google sign-in page*/
+  // onSignIn(){
+  //   link.href = 
+  // }
+
 
 /* serach scale table for the letter grade by id number */  
 searchScalesById(id: number)
 {
   var result = "";
-  for (let i = 0; i < scales.length; i++) {
-    if(scales[i].id == id)
+  for (let i = 0; i < this.scales.length; i++) {
+    if(this.scales[i].id == id)
     {
-      result = scales[i].letterGrade;
+      result = this.scales[i].letterGrade;
       console.log ("found!" + i);
     }
   }
@@ -483,6 +474,97 @@ searchScalesById(id: number)
     console.log("not found!");
   }
   return result;
+}
+
+searchFAQ(key: string) {
+  this.faq_1 = false;
+  this.faq0 = false;
+  this.faq1 = false;
+  this.faq2 = false;
+  this.faq3 = false;
+  this.faq4 = false;
+  this.faq5 = false;
+  this.faq6 = false;
+  this.faq7 = false;
+  this.faq8 = false;
+  this.faq9 = false;
+  if (
+    'How do I use this GPA Calculator'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq_1 = true;
+  }
+  if (
+    'How does the GPA Report work'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq0 = true;
+  }
+  if (
+    'How do I calculate my High School Semester GPA'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq1 = true;
+  }
+  if (
+    'What affect do AP and Honors courses have on my GPA'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq2 = true;
+  }
+  if (
+    'How can I calculate my total GPA (using cumulative GPA)'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq3 = true;
+  }
+  if (
+    'Should I take a lot of AP and Honors courses'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq4 = true;
+  }
+  if (
+    'Is it more important to take more AP and Honors classes or is it more important to have better grades in less challenging classes'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq5 = true;
+  }
+  if (
+    'What is considered a good GPA'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq6 = true;
+  }
+  if (
+    'What is the highest high school GPA possible'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq7 = true;
+  }
+  if (
+    'Is high school GPA important for college'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq8 = true;
+  }
+  if (
+    ' If I have a low GPA, does that mean I cannot go to a good college anymore'
+      .toLowerCase()
+      .indexOf(key.toLowerCase()) !== -1
+  ) {
+    this.faq9 = true;
+  }
 }
 
 
@@ -547,6 +629,10 @@ searchScalesById(id: number)
     this.showQ9 = ! this.showQ9;
   }
 
+  toggleGradingScale(){
+    this.showGradingScale = !this.showGradingScale;
+  }
+
   
   /* construct the content string for the GPA report */
   constructReport()
@@ -583,32 +669,20 @@ searchScalesById(id: number)
     var detailString = "";
     if(this.checkDetailGPA)
     {
-      if(this.gradeFormat=='LETTERS')
+      detailString = "Below is the table showing the details:\n------------------------------------------------\n" +
+      "\n| Course Name  | Grade | Credits | Course Type |\n";
+      for(var i = 0; i < this.gradeTable.length; i++)
       {
-        detailString = "Below is the table showing the details:\n" +
-        "|Course Name  | Grade | Credits | Course Type\n" +
-        "|" + this.firstCourseName + " | " + this.searchScalesById(this.firstGrade).toString() + " | " + this.firstCredit.toString() + " | " + this.firstType + " | " + "\n" +
-        "|" + this.secondCourseName + " | " + this.searchScalesById(this.secondGrade).toString() + " | " + this.secondCredit.toString() + " | " + this.secondType + " | " + "\n" +
-        "|" + this.thirdCourseName + " | " + this.searchScalesById(this.thirdGrade).toString() + " | " + this.thirdCredit.toString() + " | " + this.thirdType + " | " + "\n" +
-        "|" + this.fourthCourseName + " | " + this.searchScalesById(this.fourthGrade).toString() + " | " + this.fourthCredit.toString() + " | " + this.fourthType + " | " + "\n" +
-        "|" + this.fifthCourseName + " | " + this.searchScalesById(this.fifthGrade).toString() + " | " + this.fifthCredit.toString() + " | " + this.fifthType + " | " + "\n" +
-        "|" + this.sixthCourseName + " | " + this.searchScalesById(this.sixthGrade).toString() + " | " + this.sixthCredit.toString() + " | " + this.sixthType + " | " + "\n" +
-        "|" + this.seventhCourseName + " | " + this.searchScalesById(this.seventhGrade).toString() + " | " + this.seventhCredit.toString() + " | " + this.seventhType + " | " + "\n" +
-        "|" + this.eighthCourseName + " | " + this.searchScalesById(this.eighthGrade).toString() + " | " + this.eighthCredit.toString() + " | " + this.eighthType + " | " + "\n";
+        if(this.gradeFormat=='LETTERS')
+        {
+          detailString += "| " + this.gradeTable[i].courseName + " | " + this.searchScalesById(this.gradeTable[i].grade).toString() + " | " + this.gradeTable[i].credit.toString() + " | " + this.gradeTable[i].type + " | " + "\n";
+        }
+        else if(this.gradeFormat=='PERCENTAGE')
+        {
+          detailString += "| " + this.gradeTable[i].courseName + " | " + this.gradeTable[i].gradePercent+ " | " + this.gradeTable[i].credit.toString() + " | " + this.gradeTable[i].type + " | " + "\n";
+        }
       }
-      else if(this.gradeFormat=='PERCENTAGE')
-      {
-        detailString = "Below is the table showing the details:\n" +
-        "|Course Name  | Grade | Credits | Course Type\n" +
-        "|" + this.firstCourseName + " | " + this.firstGradePercent + " | " + this.firstCredit.toString() + " | " + this.firstType + " | " + "\n" +
-        "|" + this.secondCourseName + " | " + this.secondGradePercent + " | " + this.secondCredit.toString() + " | " + this.secondType + " | " + "\n" +
-        "|" + this.thirdCourseName + " | " + this.thirdGradePercent + " | " + this.thirdCredit.toString() + " | " + this.thirdType + " | " + "\n" +
-        "|" + this.fourthCourseName + " | " + this.fourthGradePercent + " | " + this.fourthCredit.toString() + " | " + this.fourthType + " | " + "\n" +
-        "|" + this.fifthCourseName + " | " + this.fifthGradePercent + " | " + this.fifthCredit.toString() + " | " + this.fifthType + " | " + "\n" +
-        "|" + this.sixthCourseName + " | " + this.sixthGradePercent+ " | " + this.sixthCredit.toString() + " | " + this.sixthType + " | " + "\n" +
-        "|" + this.seventhCourseName + " | " + this.seventhGradePercent + " | " + this.seventhCredit.toString() + " | " + this.seventhType + " | " + "\n" +
-        "|" + this.eighthCourseName + " | " + this.eighthGradePercent + " | " + this.eighthCredit.toString() + " | " + this.eighthType + " | " + "\n";
-      }
+      detailString += "------------------------------------------------\n";
     }
 
     var result = 
@@ -617,24 +691,26 @@ searchScalesById(id: number)
     return result;
   }
   
-  /* calculate the unweighted GPA by the percentage grade*/
+
+
+  /* calculate the unweighted GPA by the letter grade*/
+  findGradeScoreUnWeighted(grade: number){
+    var currentScale = this.scales[Math.round(grade)];
+    return currentScale.regular;
+  }
+
+    /* calculate the unweighted GPA by the percentage grade*/
   findGradeScoreByPercentageUnweighted(grade: string){
     var result = 0;
-    for(var i=0;i<scales.length;i++)
+    for(var i=0;i<this.scales.length;i++)
     {
-      if(parseInt(grade)>=scales[i].percentGrade)
+      if(parseInt(grade)>=this.scales[i].percentGrade)
       {
-         result = scales[i].regular;
+         result = this.scales[i].regular;
          break;
       }
     }
     return result;
-  }
-
-  /* calculate the unweighted GPA by the letter grade*/
-  findGradeScoreUnWeighted(grade: number){
-    var currentScale = scales[Math.round(grade)];
-    return currentScale.regular;
   }
 
   /* calculate the unweighted GPA for a single course by the letter grade*/
@@ -653,38 +729,42 @@ searchScalesById(id: number)
 
 /* calculate the unweighted GPA for total courses by the letter grade*/  
 calculateTotalGPA(){
-  var firstGPA = this.calculateSingleGPAUnWeighted(this.firstGrade, this.firstCredit);
-  var secondGPA = this.calculateSingleGPAUnWeighted(this.secondGrade, this.secondCredit);
-  var thirdGPA = this.calculateSingleGPAUnWeighted(this.thirdGrade, this.thirdCredit);
-  var fourthGPA = this.calculateSingleGPAUnWeighted(this.fourthGrade, this.fourthCredit);
-  var fifthGPA = this.calculateSingleGPAUnWeighted(this.fifthGrade, this.fifthCredit);
-  var sixthGPA = this.calculateSingleGPAUnWeighted(this.sixthGrade, this.sixthCredit);
-  var seventhGPA = this.calculateSingleGPAUnWeighted(this.seventhGrade, this.seventhCredit);
-  var eighthGPA = this.calculateSingleGPAUnWeighted(this.eighthGrade, this.eighthCredit);
-  return firstGPA + secondGPA + thirdGPA + fourthGPA + fifthGPA + sixthGPA + seventhGPA + eighthGPA;
+  var currentGPA = 0;
+  var totalGPA = 0;
+  for(var i = 0; i < this.gradeTable.length; i++)
+  {
+    currentGPA = this.calculateSingleGPAUnWeighted(this.gradeTable[i].grade, this.gradeTable[i].credit);
+    totalGPA += currentGPA;
+  }
+
+  return totalGPA;
 }
 
 /* calculate the unweighted GPA for total courses by the percentage grade*/
 calculateTotalGPAPercentage(){
-  var firstGPA = this.calculateSingleGPAUnWeightedPercentage(this.firstGradePercent, this.firstCredit);
-  var secondGPA = this.calculateSingleGPAUnWeightedPercentage(this.secondGradePercent, this.secondCredit);
-  var thirdGPA = this.calculateSingleGPAUnWeightedPercentage(this.thirdGradePercent, this.thirdCredit);
-  var fourthGPA = this.calculateSingleGPAUnWeightedPercentage(this.fourthGradePercent, this.fourthCredit);
+  var currentGPA = 0;
+  var totalGPA = 0;
+  for(var i = 0; i < this.gradeTable.length; i++)
+  {
+    currentGPA = this.calculateSingleGPAUnWeightedPercentage(this.gradeTable[i].gradePercent, this.gradeTable[i].credit);
+    totalGPA += currentGPA;
+  }
 
-  var fifthGPA = this.calculateSingleGPAUnWeightedPercentage(this.fifthGradePercent, this.fifthCredit);
-  var sixthGPA = this.calculateSingleGPAUnWeightedPercentage(this.sixthGradePercent, this.sixthCredit);
-  var seventhGPA = this.calculateSingleGPAUnWeightedPercentage(this.seventhGradePercent, this.seventhCredit);
-  var eighthGPA = this.calculateSingleGPAUnWeightedPercentage(this.eighthGradePercent, this.eighthCredit);
-  return firstGPA + secondGPA + thirdGPA + fourthGPA + fifthGPA + sixthGPA + seventhGPA + eighthGPA;
+  return totalGPA;
 }
 
 /*calculate the unweighted GPA for all the courses
   This function is called in HTML*/
 calculateAllGPAUnWeighted(){
- var totalCredits = parseInt(this.firstCredit) + parseInt(this.secondCredit) + parseInt(this.thirdCredit) + parseInt(this.fourthCredit)
- + parseInt(this.fifthCredit) + parseInt(this.sixthCredit) + parseInt(this.seventhCredit) + parseInt(this.eighthCredit);
+var totalCredits = 0;
+ for(var i = 0; i < this.gradeTable.length; i++)
+ {
+    totalCredits += parseInt(this.gradeTable[i].credit);
+ }
+ console.log(totalCredits);
+
   var answer = 0;
-  if(totalCredits > 0)
+  if(totalCredits > 0 && !Number.isNaN(totalCredits))
   {
     if(this.gradeFormat=='LETTERS')
     {
@@ -702,20 +782,23 @@ calculateAllGPAUnWeighted(){
   This function is called in HTML*/
 calculateTotalGPAUnWeighted(){
   var allGrades = this.cumulativeGPA*parseInt(this.cumulativeCredit);
-  var totalCredits = parseInt(this.firstCredit) + parseInt(this.secondCredit) + parseInt(this.thirdCredit) + parseInt(this.fourthCredit) 
-  + parseInt(this.fifthCredit) + parseInt(this.sixthCredit) + parseInt(this.seventhCredit) + parseInt(this.eighthCredit) + parseInt(this.cumulativeCredit);
+
+  var totalCredits = parseInt(this.cumulativeCredit);
+  for(var i=0; i < this.gradeTable.length; i++)
+  {
+    totalCredits += parseInt(this.gradeTable[i].credit);
+  }
+
   var answer = 0;
   if(totalCredits > 0)
   {
     if(this.gradeFormat=='LETTERS')
     {
       allGrades += this.calculateTotalGPA();
-      answer = this.calculateTotalGPA() / totalCredits;
     }
     else if(this.gradeFormat=='PERCENTAGE')
     {
       allGrades += this.calculateTotalGPAPercentage();
-      answer = this.calculateTotalGPAPercentage() / totalCredits;
     }
     answer = allGrades / totalCredits;
   }
@@ -725,22 +808,22 @@ calculateTotalGPAUnWeighted(){
 /* calculate the weighted GPA by the percentage grade*/
 findGradeScoreByPercentageWeighted(grade: string, type: string){
   var result = 0;
-  for(var i=0;i<scales.length;i++)
+  for(var i=0;i<this.scales.length;i++)
   {
-    if(parseInt(grade)>=scales[i].percentGrade)
+    if(parseInt(grade)>=this.scales[i].percentGrade)
     {
       switch(type) {
         case "regular":
-          result = scales[i].regular;
+          result = this.scales[i].regular;
           break;
         case "honors":
-          result = scales[i].honors;
+          result = this.scales[i].honors;
           break;
         case "ap":
-          result = scales[i].ap;
+          result = this.scales[i].ap;
           break;
         default:
-          result = scales[i].regular;
+          result = this.scales[i].regular;
           break;
       }
       break;
@@ -751,7 +834,7 @@ findGradeScoreByPercentageWeighted(grade: string, type: string){
 
 /* calculate the weighted GPA by the grade and course type*/
 findGradeScoreWeighted(grade: number, type: string){
-  var currentScale = scales[Math.round(grade)];
+  var currentScale = this.scales[Math.round(grade)];
   var gradeNumber = 0;
   switch (type) {
     case "regular":
@@ -791,45 +874,41 @@ calculateSingleGPAWeightedPercent(grd: string, type: string, credit: string)
 /* calculate the weighted GPAfor all the courses
   This function is called in html*/
 calculateAllGPAWeighted(){
-  var firstGPA = 0;
-  var secondGPA = 0;
-  var thirdGPA = 0;
-  var fourthGPA = 0;
-  var fifthGPA = 0;
-  var sixthGPA = 0;
-  var seventhGPA = 0;
-  var eighthGPA = 0;
+  var currentGPA = 0;
+  var totalGPA = 0;
+
   if(this.gradeFormat=='LETTERS')
   {
-    firstGPA = this.calculateSingleGPAWeighted(this.firstGrade, this.firstType, this.firstCredit);
-    secondGPA = this.calculateSingleGPAWeighted(this.secondGrade, this.secondType, this.secondCredit);
-    thirdGPA = this.calculateSingleGPAWeighted(this.thirdGrade, this.thirdType, this.thirdCredit);
-    fourthGPA = this.calculateSingleGPAWeighted(this.fourthGrade, this.fourthType, this.fourthCredit);
-    fifthGPA = this.calculateSingleGPAWeighted(this.fifthGrade, this.fifthType, this.fifthCredit);
-    sixthGPA = this.calculateSingleGPAWeighted(this.sixthGrade, this.sixthType, this.sixthCredit);
-    seventhGPA = this.calculateSingleGPAWeighted(this.seventhGrade, this.seventhType, this.seventhCredit);
-    eighthGPA = this.calculateSingleGPAWeighted(this.eighthGrade, this.eighthType, this.eighthCredit);
+    for(var i = 0; i < this.gradeTable.length; i++)
+    {
+      currentGPA = this.calculateSingleGPAWeighted(this.gradeTable[i].grade, this.gradeTable[i].type, this.gradeTable[i].credit);
+      totalGPA += currentGPA;
+    }
   }
   else if(this.gradeFormat=='PERCENTAGE')
   {
-    firstGPA = this.calculateSingleGPAWeightedPercent(this.firstGradePercent, this.firstType, this.firstCredit);
-    secondGPA = this.calculateSingleGPAWeightedPercent(this.secondGradePercent, this.secondType, this.secondCredit);
-    thirdGPA = this.calculateSingleGPAWeightedPercent(this.thirdGradePercent, this.thirdType, this.thirdCredit);
-    fourthGPA = this.calculateSingleGPAWeightedPercent(this.fourthGradePercent, this.fourthType, this.fourthCredit);
-    fifthGPA = this.calculateSingleGPAWeightedPercent(this.fifthGradePercent, this.fifthType, this.fifthCredit);
-    sixthGPA = this.calculateSingleGPAWeightedPercent(this.sixthGradePercent, this.sixthType, this.sixthCredit);
-    seventhGPA = this.calculateSingleGPAWeightedPercent(this.seventhGradePercent, this.seventhType, this.seventhCredit);
-    eighthGPA = this.calculateSingleGPAWeightedPercent(this.eighthGradePercent, this.eighthType, this.eighthCredit);
+    for(var i = 0; i < this.gradeTable.length; i++)
+    {
+      currentGPA = this.calculateSingleGPAWeightedPercent(this.gradeTable[i].gradePercent, this.gradeTable[i].type, this.gradeTable[i].credit);
+      totalGPA += currentGPA;
+    }
+
   }
-  var totalCredits = parseInt(this.firstCredit) + parseInt(this.secondCredit) + parseInt(this.thirdCredit) + parseInt(this.fourthCredit)
-  + parseInt(this.fifthCredit) + parseInt(this.sixthCredit) + parseInt(this.seventhCredit) + parseInt(this.eighthCredit);
+
+  var totalCredits = 0;
+  for(var i = 0; i < this.gradeTable.length; i++)
+  {
+    totalCredits += parseInt(this.gradeTable[i].credit);
+  }
+
   var answer = 0;
   if(totalCredits > 0)
   {
-    answer = (firstGPA + secondGPA + thirdGPA + fourthGPA + fifthGPA + sixthGPA + seventhGPA + eighthGPA) / totalCredits;
+    answer = totalGPA / totalCredits;
   }
   return Math.round(answer*100)/100;
   }
+  
   
 
   // This is the end of function definitions.

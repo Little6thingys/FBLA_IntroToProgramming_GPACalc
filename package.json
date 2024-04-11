@@ -20,8 +20,10 @@
     "@angular/forms": "17.0.8",
     "@angular/platform-browser": "17.0.8",
     "@angular/platform-browser-dynamic": "17.0.8",
-    "@angular/router": "17.0.8",
+    "@angular/router": "^17.0.8",
+    "@tawk.to/tawk-messenger-angular": "github:tawk/tawk-messenger-angular",
     "angular-in-memory-web-api": "^0.17.0",
+    "angular-oauth2-oidc": "^17.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.0"
