@@ -101,8 +101,8 @@ export class GpaCalcComponent implements AfterViewInit {
   /* the semester title from the user input*/ 
   semesterTitle: string= "";
 
-   /* the semester title from the user input*/
-   searchKeyword: string = '';
+  /* the semester title from the user input*/
+  searchKeyword: string = '';
 
   /* variables for every course name, grade, percentage grade, credit, and course type from the user input */
   
