@@ -13,7 +13,7 @@ header {
 
 #tab-bar{
   font-family: Arial, sans-serif;
-  background-color: rgb(103, 136, 163);
+  background-color: rgb(47, 67, 40);
   margin: 0;
   padding: 0;
   height: 60px;
@@ -32,7 +32,7 @@ header {
 
 button {
   border: none;
-  background-color: rgb(103, 136, 163);
+  background-color: rgb(47, 67, 40);
   font-size: 16px;
   font: sans-serif;
   color: white;

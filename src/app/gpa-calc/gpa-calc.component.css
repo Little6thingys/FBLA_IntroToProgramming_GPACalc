@@ -41,6 +41,9 @@ input {
   text-align: center;
 }
 
+.large_header {
+  color: #74d679;
+}
 
 #title
 {
@@ -62,7 +65,7 @@ input {
 }
 
 #copyRight {
-  background-color: rgb(143, 30, 30);
+  background-color: rgb(34, 30, 143);
   color: antiquewhite;
   text-align: center;
 }

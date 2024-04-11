@@ -1,18 +1,15 @@
 #bigDiv
  { width: 800px; top: 10%; left: 30%; margin-top: 100px; margin-left: 240px; margin: auto} 
 
+h2 {
+  color: #fff;
+}
 
-
-/* body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+body {
+  background-color: #1f2225;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-} */
+}
 
 #all{
   font-family: Arial, sans-serif;
@@ -29,6 +26,9 @@ input {
   text-align: center;
 }
 
+.large_header {
+  color: #74d679;
+}
 
 #title
 {
@@ -63,6 +63,15 @@ input {
   text-align: center;
 }
 
+.section {
+  background-color: #1c3f3e;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
 #resultTitle{
   background-color: rgb(184, 208, 228);
   padding: 20px;
@@ -72,7 +81,7 @@ input {
 }
 
 #instructionTitle{
-  background-color: rgb(176, 202, 60);
+  background-color: #14867c;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(118, 224, 104, 0.1);
@@ -120,7 +129,7 @@ input {
 }
 
 button {
-  background-color: #ca885c;
+  background-color: #25a667;
   color: #fff;
   border: none;
   padding: 10px 20px;
