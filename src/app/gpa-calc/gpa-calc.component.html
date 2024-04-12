@@ -49,14 +49,188 @@
 <div>
     <button routerLink="/gpa-auto/login"> Go to Google Classroom API </button>
 </div>
+<br>
 
-  <div id="resultTitle">
-    <h2>Your Total GPA is: {{ calculateTotalGPAUnWeighted() }}</h2>
-  </div>
+<div id="instructionTitle">
+  <h4>Input your Course Information here: </h4>
+</div>
+<div>
+  
+  <div>
+  <div> <p> Give the semester a name and choose a grade input option. </p> </div>
+  <br>
+  <tr>
+    <td>
+      <input
+        id="semesterTitle"
+        placeholder="Semester Title"
+        class="form-control"
+        [(ngModel)]="semesterTitle"
+        [ngModelOptions]="{ standalone: true }"
+      />
+    </td>
+    <td>
+      <select
+        class="form-control"
+        [(ngModel)]="gradeFormat"
+        [ngModelOptions]="{ standalone: true }"
+      >
+        <option value="LETTERS">LETTERS</option>
+        <option value="PERCENTAGE">PERCENTAGE</option>
+      </select>
+    </td>
+  </tr>
+
+      <div>
+    <div id="calculator">
+    <p> Input the name, the grade, the credits earned, and the type for each one of your courses in their respective columns.</p>
+    <br>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Course Name</th>
+          <th scope="col">Grade</th>
+          <th scope="col">Credits</th>
+          <th scope="col">Course Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of gradeTable; let i = index">
+          <td>
+            <input
+              id="courseName"
+              placeholder="Enter course name"
+              class="form-control"
+              [(ngModel)]="row.courseName"
+              [ngModelOptions]="{ standalone: true }"
+            />
+          </td>
+
+          <td *ngIf="gradeFormat == 'LETTERS'; else percentage1">
+            <select
+              class="form-control"
+              [(ngModel)]="row.grade"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              *ngFor="let scale of scales">
+              <option *ngFor="let scale of scales" value="{{ scale.id }}">
+                {{ scale.letterGrade }}
+              </option>
+            </select>
+          </td>
+          <ng-template #percentage1>
+            <input
+              id="courseName"
+              placeholder="Enter percentage grade"
+              class="form-control"
+              [(ngModel)]="row.gradePercent"
+              [ngModelOptions]="{ standalone: true }"
+              (ngModelChange)="validatePerentage(row)"
+            />
+            <div id="errorDiv" *ngIf="!row.validPercentage">
+              Percentage grade must be a positive integer or zero!
+            </div>
+          </ng-template>
+
+          <td>
+            <input
+              class="form-control"
+              [(ngModel)]="row.credit"
+              [ngModelOptions]="{ standalone: true }"
+              id="credit"
+              (ngModelChange)="validateCredit(row)"
+              placeholder="Enter credits"
+            />
+            <div id="errorDiv" *ngIf="!row.validCredit">
+              Credit must be a positive integer or zero!
+            </div>
+          </td>
+          <td>
+            <select
+              class="form-control"
+              [(ngModel)]="row.type"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <option value="regular">Regular</option>
+              <option value="honors">Honors</option>
+              <option value="ap">AP</option>
+            </select>
+          </td>
+          <td><button (click)="removeRow(i)">Remove</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <button (click)="addRow()">Add Course</button>
+    <div id="backupAndRestoreGrade">
+      <tr>
+      <button id="backupGrade"  (click)="backupGradeTable()">Backup grade table</button>
+      </tr>
+      <tr id="restoreGradeSection">
+        <button id="restoreGrade" (click)="restoreGradeTableFromBackupFile()">
+          Restore grade table from the following file:
+        </button>
+        
+        <input id="fileSelectGrade"
+        type="file" width="480px"
+        (change)="onFileSelected($event)"
+        accept=".txt"
+      />
+      <div id="errorDiv" *ngIf="this.invalidContentGradeTable">
+        Backup file data is corrupted, no grade table is restored!
+      </div>
+      <div id="errorDiv" *ngIf="this.noFileSelected">
+        No file is selected, please select one file!
+      </div>
+      </tr>
+      
+    </div>
+    </div>
+
+    <br>
+    <div id="instructionTitle">
+      <h4>Input your Cumulative GPA (optional):</h4>
+    </div>
+    <div id="currentGpa">
+      <div><p> Input your GPA prior to this semester and the amount of credits you have earned so far down below. This information will be used with your calculated Semester GPA to calculate your overall total GPA. </p></div>
+      <br>
+        <table>
+        <thead>
+          <tr>
+            <th scope="col">Cumulative GPA</th>
+            <th scope="col">Credits</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <input
+                id="cumulativeGpa"
+                placeholder="Enter cumulative GPA"
+                class="form-control"
+                [(ngModel)]="cumulativeGPA"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </td>
+            <td>
+              <input
+                id="credit"
+                placeholder="Enter credits"
+                class="form-control"
+                [(ngModel)]="cumulativeCredit"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <br>
+
+    
+<br>
   <div id="resultTitle">
     <h2>Your Semester GPA is:</h2>
   </div>
-
   <div id="currentGpa">
     <table>
       <thead>
@@ -87,9 +261,14 @@
       </tbody>
     </table>
   </div>
-
-
   <div id="resultTitle">
+    <h2>Your Total GPA is: {{ calculateTotalGPAUnWeighted() }}</h2>
+  </div>
+
+  <br>
+  <br>
+
+  <div id="GpaReport">
   <h2> GPA Report </h2>
   <div><p>Generate a simple report that can show your weighted GPA, unweighted GPA, cumulative GPA, total GPA, and course information. Click the red button to download the file.</p></div>
   <br>
@@ -117,183 +296,9 @@
   (click)="onSaveFile()"> Generate GPA Report</button>
 </div>
 
+  
   <br>
-  <div id="instructionTitle">
-    <h4>Input your Cumulative GPA (optional):</h4>
-  </div>
-  <div id="currentGpa">
-    <div><p> Input your GPA prior to this semester and the amount of credits you have earned so far down below. This information will be used with your calculated Semester GPA to calculate your overall total GPA. </p></div>
-    <br>
-      <table>
-      <thead>
-        <tr>
-          <th scope="col">Cumulative GPA</th>
-          <th scope="col">Credits</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <input
-              id="cumulativeGpa"
-              placeholder="Enter cumulative GPA"
-              class="form-control"
-              [(ngModel)]="cumulativeGPA"
-              [ngModelOptions]="{ standalone: true }"
-            />
-          </td>
-          <td>
-            <input
-              id="credit"
-              placeholder="Enter credits"
-              class="form-control"
-              [(ngModel)]="cumulativeCredit"
-              [ngModelOptions]="{ standalone: true }"
-            />
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <br>
-  <br>
-  <div id="instructionTitle">
-    <h4>Input your Course Information here: </h4>
-  </div>
- <div>
-    
-    <div>
-    <br>
-    <div> <p> Give the semester a name and choose a grade input option. </p> </div>
-    <br>
-    <tr>
-      <td>
-        <input
-          id="semesterTitle"
-          placeholder="Semester Title"
-          class="form-control"
-          [(ngModel)]="semesterTitle"
-          [ngModelOptions]="{ standalone: true }"
-        />
-      </td>
-      <td>
-        <select
-          class="form-control"
-          [(ngModel)]="gradeFormat"
-          [ngModelOptions]="{ standalone: true }"
-        >
-          <option value="LETTERS">LETTERS</option>
-          <option value="PERCENTAGE">PERCENTAGE</option>
-        </select>
-      </td>
-    </tr>
-
-        <div>
-      <div id="calculator">
-      <p> Input the name, the grade, the credits earned, and the type for each one of your courses in their respective columns.</p>
-      <br>
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Course Name</th>
-            <th scope="col">Grade</th>
-            <th scope="col">Credits</th>
-            <th scope="col">Course Type</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of gradeTable; let i = index">
-            <td>
-              <input
-                id="courseName"
-                placeholder="Enter course name"
-                class="form-control"
-                [(ngModel)]="row.courseName"
-                [ngModelOptions]="{ standalone: true }"
-              />
-            </td>
-
-            <td *ngIf="gradeFormat == 'LETTERS'; else percentage1">
-              <select
-                class="form-control"
-                [(ngModel)]="row.grade"
-                [ngModelOptions]="{ standalone: true }"
-              >
-                *ngFor="let scale of scales">
-                <option *ngFor="let scale of scales" value="{{ scale.id }}">
-                  {{ scale.letterGrade }}
-                </option>
-              </select>
-            </td>
-            <ng-template #percentage1>
-              <input
-                id="courseName"
-                placeholder="Enter percentage grade"
-                class="form-control"
-                [(ngModel)]="row.gradePercent"
-                [ngModelOptions]="{ standalone: true }"
-                (ngModelChange)="validatePerentage(row)"
-              />
-              <div id="errorDiv" *ngIf="!row.validPercentage">
-                Percentage grade must be a positive integer or zero!
-              </div>
-            </ng-template>
-
-            <td>
-              <input
-                class="form-control"
-                [(ngModel)]="row.credit"
-                [ngModelOptions]="{ standalone: true }"
-                id="credit"
-                (ngModelChange)="validateCredit(row)"
-                placeholder="Enter credits"
-              />
-              <div id="errorDiv" *ngIf="!row.validCredit">
-                Credit must be a positive integer or zero!
-              </div>
-            </td>
-            <td>
-              <select
-                class="form-control"
-                [(ngModel)]="row.type"
-                [ngModelOptions]="{ standalone: true }"
-              >
-                <option value="regular">Regular</option>
-                <option value="honors">Honors</option>
-                <option value="ap">AP</option>
-              </select>
-            </td>
-            <td><button (click)="removeRow(i)">Remove</button></td>
-          </tr>
-        </tbody>
-      </table>
-      <button (click)="addRow()">Add Course</button>
-     
-      </div>
-      <div>
-        <tr>
-        <button id="backupGrade"  (click)="backupGradeTable()">Backup grade table</button>
-        </tr>
-        <br>
-        <tr>
-          <button id="restoreGrade" (click)="restoreGradeTableFromBackupFile()">
-            Restore grade table from the following file:
-          </button>
-          
-          <input id="fileSelectGrade"
-          type="file" width="480px"
-          (change)="onFileSelected($event)"
-          accept=".txt"
-        />
-        <div id="errorDiv" *ngIf="this.invalidContentGradeTable">
-          Backup file data is corrupted, no grade table is restored!
-        </div>
-        <div id="errorDiv" *ngIf="this.noFileSelected">
-          No file is selected, please select one file!
-        </div>
-        </tr>
-        
-      </div>
+  
      <br>
       <div id="instructionTitle">
         <h4> Grading Scale Reference Table: </h4>
@@ -396,6 +401,8 @@
        </div>
     </div>
   </div>
+
+  <br>
 
   <div id="instructionTitle">
     <h4> Search "Frequently Asked Questions" section: </h4>
@@ -698,8 +705,6 @@
     </div>
   </div>
 
-
-<br>
 <br>
 <button 
   (click)="changeFAQ()"> Show/Hide "Frequently Asked Questions" section</button>

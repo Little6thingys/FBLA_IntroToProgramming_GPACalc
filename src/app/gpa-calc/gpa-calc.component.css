@@ -1,5 +1,5 @@
 #bigDiv
- { width: 800px; top: 10%; left: 30%; margin-top: 100px; margin-left: 240px; margin: auto; background-color: #1f2225; padding:20px; align: center; border-radius: 8px; } 
+ { width: 800px; top: 10%; left: 30%; margin-top: 100px; margin-left: 240px; margin: auto; background-color: #1f2225; padding:20px; border-radius: 8px; } 
 
  *{
   margin-top: 10px;
@@ -16,14 +16,10 @@
 
 
 body {
-  font-family: Arial, sans-serif;
   background-color: #1f2225;
+  color: #fff;
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
 }
 
 #all{
@@ -75,8 +71,17 @@ input {
   text-align: center;
 }
 
-#resultTitle{
+#GpaReport {
   background-color: #1c3f3e;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+#resultTitle{
+  background-color: #8C86AA;
   color: #fff;
   padding: 20px;
   border-radius: 8px;
@@ -120,6 +125,10 @@ color:crimson;
 label {
   display: block;
   margin-bottom: 10px;
+}
+
+.large_header {
+  color: #7D80DA;
 }
 
 input {
@@ -189,6 +198,17 @@ td{
 #course-name
 {
   width: 250px;
+}
+
+#backupGrade{
+  display: flex;
+  justify-content: left;
+}
+
+#restoreGradeSection{
+  display: flex;
+  justify-content: left;
+  align-items: center;
 }
 
 tbody{
