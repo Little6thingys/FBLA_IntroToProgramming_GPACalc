@@ -1,1 +1,86 @@
-<p>gpa-auto works!</p>
+<!-- <p>gpa-auto works!</p>
+<ul>
+    <li *ngFor="let course of courses">
+      {{ course.name }}
+    </li>
+  </ul>
+
+   -->
+   <body>
+    <div id="bigDiv">
+      <br>
+      <div id="title">
+        <h1> Google Classroom Calculator </h1>
+        <hr />
+      </div>
+      <br>
+   <div id="resultTitle">
+    <h2>Your Class Grades:</h2>
+    <div class="course">
+      <h3 class="courseGrade">&ensp;FBLA Test Class 1:&emsp;A/95</h3>
+      <h3 class="courseType"> Course Type: Regular&ensp;</h3>
+    </div>
+    <div class="course">
+      <h3 class="courseGrade">&ensp;FBLA Test Class 2:&emsp;B-/82% </h3>
+      <h3 class="courseType"> Course Type: Honors&ensp;</h3>
+    </div>
+    <div class="course">
+      <h3 class="courseGrade">&ensp;FBLA Test Class 3:&emsp;A-/90% </h3>
+      <h3 class="courseType"> Course Type: Regular&ensp;</h3>
+    </div>
+    <div class="course">
+      <h3 class="courseGrade">&ensp;FBLA Test Class 4:&emsp;B+/87% </h3>
+      <h3 class="courseType"> Course Type: Regular&ensp;</h3>
+    </div>
+    <div class="course">
+      <h3 class="courseGrade">&ensp;FBLA Test Class 5:&emsp;B-/80% </h3>
+      <h3 class="courseType"> Course Type: AP&ensp;</h3>
+    </div>
+  </div>
+  <br>
+
+   <div id="resultTitle">
+    <h2>Your Total GPA is:</h2>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Semester</th>
+            <th scope="col">Unweighted GPA</th>
+            <th scope="col">Weighted GPA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input id="semester" value="Google Classrooom" readonly /></td>
+            <td>
+              <input
+                id="unweightedGpa"
+                readonly
+                value= 3.3
+              />
+            </td>
+            <td>
+              <input
+                id="weightedGpa"
+                readonly
+                value="3.6"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <br>
+
+ 
+
+<div *ngFor="let course of courses">
+  <h2>{{ course.name }}</h2>
+  <p *ngFor="let grade of course.grades">
+    {{ grade }}
+  </p>
+</div>
+</div>
+</body>

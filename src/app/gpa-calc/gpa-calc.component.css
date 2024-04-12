@@ -81,7 +81,7 @@ input {
 }
 
 #resultTitle{
-  background-color: #8C86AA;
+  background-color: #1c3f3e;
   color: #fff;
   padding: 20px;
   border-radius: 8px;
@@ -92,6 +92,7 @@ input {
 #instructionTitle
 {
   background-color: #14867c;
+  color: #000;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(118, 224, 104, 0.1);

@@ -1,0 +1,441 @@
+app-gpa-auto {
+  background-color: #1f2225;
+  font-family: sans-serif;
+}
+
+*{
+  margin: auto;
+}
+#bigDiv
+ { width: 750px;  background-color: #1f2225; padding:0 10%; border-radius: 8px;} 
+
+ *{
+  margin-top: 10px;
+ }
+
+ p, ::placeholder, h2, li{
+  color: #fff;
+ }
+
+ input, select{
+  background-color:#406061;
+  color: #fff;
+ }
+
+
+body {
+  background-color: #1f2225;
+  height: 800px;
+}
+
+#all{
+  font-family: Arial, sans-serif;
+  background-color: #1f2225;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+input {
+  text-align: center;
+}
+
+
+#title
+{
+  color:#fff;
+  text-align: center;
+}
+
+
+#currentGpa{
+  background-color: #1c3f3e;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+#copyRight {
+  background-color: rgb(143, 30, 30);
+  color: antiquewhite;
+  text-align: center;
+}
+
+#calculator {
+  background-color: #1c3f3e;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+#resultTitle{
+  background-color: #1c3f3e;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(118, 224, 104, 0.1);
+  text-align: left;
+}
+
+#instructionTitle
+{
+  background-color: #14867c;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(118, 224, 104, 0.1);
+  text-align: left;
+}
+
+#semesterTitle {
+  background-color: #406061;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+#description {
+  background-color: #1c3f3e;
+  padding:30px 5px;
+  border-radius: 20px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  height: 300px;
+  font-size: 16px;
+}
+
+#errorDiv
+{
+color:crimson;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input {
+  width: 170px;
+  padding: 8px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #25a667;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  text-transform: unset !important;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+#gradingScaleButton {
+  background-color: #dddada;
+  color: #000000;
+  border: 2px solid rgb(140 140 140);
+  padding: 10px 20px;
+  text-transform: unset !important;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 17px;
+  margin-left:auto;
+  margin-right: 0;
+}
+
+#result {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+#gpaReportExample{
+  list-style-type: none;
+}
+
+table {
+  width: 1000;
+  border-collapse: collapse;
+  border: 2px solid rgb(140 140 140);
+  font-family: sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.course {
+  background-color: #226b67;
+  color: #fff;
+  padding: 10px;
+  border-radius: 50px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: right;
+  height: 40px;
+}
+
+.courseGrade {
+  float:left;
+}
+
+.courseTye {
+  float:right;
+}
+
+caption {
+  caption-side: bottom;
+  padding: 10px;
+  font-weight: bold;
+}
+
+thead,
+tfoot {
+  background-color: #1c3f3e;
+  color: #fff;
+}
+
+th,
+td {
+  background-color: #1c3f3e;
+  width: 150px;
+  border: 1px solid rgb(160 160 160);
+  padding: 8px 10px;
+}
+
+td:last-of-type {
+  text-align: center;
+}
+
+td{
+  color: #fff;
+}
+#course-name
+{
+  width: 250px;
+}
+
+tbody{
+  background-color: #677072;
+}
+tbody > tr:nth-of-type(even) {
+  background-color: #8c9494;
+  color: #fff;
+}
+
+tfoot th {
+  text-align: right;
+}
+
+tfoot td {
+  font-weight: bold;
+}
+
+
+
+
+/* #bigDiv
+ { width: 800px; top: 10%; left: 30%; margin-top: 100px; margin-left: 240px; margin: auto} 
+
+
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#all{
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+input {
+  text-align: center;
+}
+
+
+#title
+{
+  font-size: 40px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(218, 229, 230, 0.1);
+  text-align: center;
+}
+
+
+#currentGpa{
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+#copyRight {
+  background-color: rgb(143, 30, 30);
+  color: antiquewhite;
+  text-align: center;
+}
+
+#calculator {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+#resultTitle{
+  background-color: rgb(184, 208, 228);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(118, 224, 104, 0.1);
+  text-align: left;
+}
+
+#instructionTitle
+{
+  background-color: rgb(176, 202, 60);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(118, 224, 104, 0.1);
+  text-align: left;
+}
+
+#semesterTitle {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+#description {
+  background-color: rgb(98, 226, 177);
+  padding: 5px;
+  border-radius: 20px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width:750px;
+  height: 300px;
+  font-size: 16px;
+}
+
+#errorDiv
+{
+color:crimson;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input {
+  width: 170px;
+  padding: 8px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #ca885c;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  text-transform: unset !important;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+#gradingScaleButton {
+  background-color: #dddada;
+  color: #000000;
+  border: 2px solid rgb(140 140 140);
+  padding: 10px 20px;
+  text-transform: unset !important;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 17px;
+  margin-left:auto;
+  margin-right: 0;
+}
+
+#result {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+#gpaReportExample{
+  list-style-type: none;
+}
+
+table {
+  width: 600;
+  border-collapse: collapse;
+  border: 2px solid rgb(140 140 140);
+  font-family: sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+caption {
+  caption-side: bottom;
+  padding: 10px;
+  font-weight: bold;
+}
+
+thead,
+tfoot {
+  background-color: rgb(228 240 245);
+}
+
+th,
+td {
+  width: 150px;
+  border: 1px solid rgb(160 160 160);
+  padding: 8px 10px;
+}
+
+td:last-of-type {
+  text-align: center;
+}
+
+#course-name
+{
+  width: 250px;
+}
+
+tbody > tr:nth-of-type(even) {
+  background-color: rgb(237 238 242);
+}
+
+tfoot th {
+  text-align: right;
+}
+
+tfoot td {
+  font-weight: bold;
+} */
