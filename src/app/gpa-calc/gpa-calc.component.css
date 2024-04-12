@@ -1,15 +1,11 @@
-html {
-  background-color: #1f2225;
-}
-
 #bigDiv
- { width: 800px; top: 10%; left: 30%; margin-top: 100px; margin-left: 240px; margin: auto; background-color: #1f2225; padding:20px; align-items: center; border-radius: 8px; } 
+ { width: 800px; top: 10%; left: 30%; margin-top: 100px; margin-left: 240px; margin: auto; background-color: #1f2225; padding:20px; align: center; border-radius: 8px; } 
 
  *{
   margin-top: 10px;
  }
 
- p, ::placeholder, h2, ol{
+ p, ::placeholder, h2{
   color: #fff;
  }
 
@@ -20,10 +16,14 @@ html {
 
 
 body {
+  font-family: Arial, sans-serif;
   background-color: #1f2225;
   margin: 0;
   padding: 0;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 #all{
@@ -41,9 +41,6 @@ input {
   text-align: center;
 }
 
-.large_header {
-  color: #74d679;
-}
 
 #title
 {
@@ -65,7 +62,7 @@ input {
 }
 
 #copyRight {
-  background-color: rgb(34, 30, 143);
+  background-color: rgb(143, 30, 30);
   color: antiquewhite;
   text-align: center;
 }
@@ -117,7 +114,7 @@ input {
 
 #errorDiv
 {
-color:rgb(255, 186, 186);
+color:crimson;
 }
 
 label {
@@ -142,20 +139,6 @@ button {
   border-radius: 4px;
   font-weight: bold;
   font-size: 17px;
-}
-
-#gradingScaleButton {
-  background-color: #dddada;
-  color: #000000;
-  border: 2px solid rgb(140 140 140);
-  padding: 10px 20px;
-  text-transform: unset !important;
-  cursor: pointer;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 17px;
-  margin-left:auto;
-  margin-right: 0;
 }
 
 #result {
@@ -223,5 +206,3 @@ tfoot th {
 tfoot td {
   font-weight: bold;
 }
-
-
