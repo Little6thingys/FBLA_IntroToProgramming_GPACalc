@@ -1,19 +1,9 @@
 #bigDiv
- { width: 800px; top: 10%; left: 30%; margin-top: 100px; margin-left: 240px; margin: auto; background-color: #1f2225; padding:20px; border-radius: 8px; } 
+ { width: 800px; top: 10%; left: 30%; margin-top: 100px; margin-left: 240px; margin: auto} 
 
- *{
-  margin-top: 10px;
- }
-
- p, ::placeholder, h2{
+h2 {
   color: #fff;
- }
-
- input, select{
-  background-color:#406061;
-  color: #fff;
- }
-
+}
 
 body {
   background-color: #1f2225;
@@ -24,7 +14,7 @@ body {
 
 #all{
   font-family: Arial, sans-serif;
-  background-color: #1f2225;
+  background-color: #f4f4f4;
   margin: 0;
   padding: 0;
   display: flex;
@@ -37,20 +27,23 @@ input {
   text-align: center;
 }
 
+.large_header {
+  color: #fff;
+}
 
 #title
 {
   font-size: 40px;
-  background-color: #1f2225;
-  color:#fff;
+  background-color: #fff;
+  padding: 20px;
   border-radius: 8px;
+  box-shadow: 0 0 10px rgba(218, 229, 230, 0.1);
   text-align: center;
 }
 
 
 #currentGpa{
-  background-color: #1c3f3e;
-  color: #fff;
+  background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -64,14 +57,14 @@ input {
 }
 
 #calculator {
-  background-color: #1c3f3e;
+  background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-#GpaReport {
+.section {
   background-color: #1c3f3e;
   color: #fff;
   padding: 20px;
@@ -81,26 +74,27 @@ input {
 }
 
 #resultTitle{
-  background-color: #1c3f3e;
-  color: #fff;
+  background-color: rgb(184, 208, 228);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(118, 224, 104, 0.1);
   text-align: left;
 }
 
-#instructionTitle
-{
+#instructionTitle{
   background-color: #14867c;
-  color: #000;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(118, 224, 104, 0.1);
   text-align: left;
+}
+
+#about {
+  text-align: center;
 }
 
 #semesterTitle {
-  background-color: #406061;
+  background-color: #fff;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -108,12 +102,12 @@ input {
 }
 
 #description {
-  background-color: #1c3f3e;
-  padding:30px 5px;
+  background-color: rgb(98, 226, 177);
+  padding: 5px;
   border-radius: 20px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
   text-align: center;
-  width:790px;
+  width:750px;
   height: 300px;
   font-size: 16px;
 }
@@ -126,10 +120,6 @@ color:crimson;
 label {
   display: block;
   margin-bottom: 10px;
-}
-
-.large_header {
-  color: #7D80DA;
 }
 
 input {
@@ -149,6 +139,20 @@ button {
   border-radius: 4px;
   font-weight: bold;
   font-size: 17px;
+}
+
+#gradingScaleButton {
+  background-color: #dddada;
+  color: #000000;
+  border: 2px solid rgb(140 140 140);
+  padding: 10px 20px;
+  text-transform: unset !important;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 17px;
+  margin-left:auto;
+  margin-right: 0;
 }
 
 #result {
@@ -177,13 +181,11 @@ caption {
 
 thead,
 tfoot {
-  background-color: #1c3f3e;
-  color: #fff;
+  background-color: rgb(228 240 245);
 }
 
 th,
 td {
-  background-color: #1c3f3e;
   width: 150px;
   border: 1px solid rgb(160 160 160);
   padding: 8px 10px;
@@ -193,31 +195,13 @@ td:last-of-type {
   text-align: center;
 }
 
-td{
-  color: #fff;
-}
 #course-name
 {
   width: 250px;
 }
 
-#backupGrade{
-  display: flex;
-  justify-content: left;
-}
-
-#restoreGradeSection{
-  display: flex;
-  justify-content: left;
-  align-items: center;
-}
-
-tbody{
-  background-color: #677072;
-}
 tbody > tr:nth-of-type(even) {
-  background-color: #8c9494;
-  color: #fff;
+  background-color: rgb(237 238 242);
 }
 
 tfoot th {

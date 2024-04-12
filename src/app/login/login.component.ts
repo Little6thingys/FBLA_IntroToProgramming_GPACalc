@@ -1,32 +1,60 @@
-import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { OAuthModule } from 'angular-oauth2-oidc';
-import { NgModule, ModuleWithProviders } from '@angular/core';
-import { GoogleApiService } from './google-api.service';
-//import { forwardRef, Inject } from '@angular/core';
-import { Injector } from '@angular/core';
-
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [
-    RouterModule,
-    HttpClientModule,
-    //OAuthModule.forRoot()
-  ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  // title = 'GPA_CALC';
-  // constructor(private readonly google: GoogleApiService) {}
-  //constructor(@Inject(forwardRef(() => GoogleApiService)) private googleApiService: GoogleApiService) {}
-  constructor(private injector: Injector) {}
+  // Replace these with your actual client ID and redirect URI
+  CLIENT_ID = '363481054949-rdjqegcv16p0d37jhcthqnf82b7s5gho.apps.googleusercontent.com';
+  REDIRECT_URI = 'http://localhost:4200/gpa-auto';
 
-get googleApiService(): GoogleApiService {
-  return this.injector.get(GoogleApiService);
+  loginWithImplicitGrant() {
+    let authUrl = 'https://accounts.google.com/o/oauth2/v2/auth' +
+      '?response_type=token' +
+      '&client_id=' + encodeURIComponent(this.CLIENT_ID) +
+      '&redirect_uri=' + encodeURIComponent(this.REDIRECT_URI) +
+      '&scope=' + encodeURIComponent('https://www.googleapis.com/auth/classroom.coursework.students');
+
+    window.location.href = authUrl;
+  }
 }
 
-}
+
+// Below code is for backend server
+// import { Component } from '@angular/core';
+
+// @Component({
+//   selector: 'app-login',
+//   standalone: true,
+//   imports: [],
+//   templateUrl: './login.component.html',
+//   styleUrl: './login.component.css'
+// })
+// export class LoginComponent {
+
+// }
+
+// import { Component } from '@angular/core';
+
+// @Component({
+//   selector: 'app-login',
+//   templateUrl: './login.component.html',
+//   styleUrls: ['./login.component.css']
+// })
+// export class LoginComponent {
+//   // Replace these with your actual client ID and redirect URI
+//   CLIENT_ID = '363481054949-6plarohgt0sibqtnq0l8ub8ejvnp5g43.apps.googleusercontent.com';
+//   REDIRECT_URI = 'https://localhost:4200/gpa-auto';
+
+//   login() {
+//     let authUrl = 'https://accounts.google.com/o/oauth2/v2/auth' +
+//       '?response_type=token' +
+//       '&client_id=' + encodeURIComponent(this.CLIENT_ID) +
+//       '&redirect_uri=' + encodeURIComponent(this.REDIRECT_URI) +
+//       '&scope=' + encodeURIComponent('https://www.googleapis.com/auth/userinfo.profile');
+
+//     window.location.href = authUrl;
+//   }
+// }
